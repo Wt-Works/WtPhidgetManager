@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<messages>
+  <message id="Antenna On">Antenna On</message>
+  <message id="DeviceLabel">DeviceLabel</message>
+	<message id="DeviceName">DeviceName</message>
+  <message id="DeviceStatus">DeviceStatus</message>
+  <message id="DeviceType">DeviceType</message>
+  <message id="DeviceVersion">DeviceVersion</message>
+  <message id="FunctionDefault">Default (0-1000)</message>
+  <message id="FunctionDefaultFormat">{1}</message>
+	<message id="ERROR">ERROR</message>
+  <message id="General Info">General Info</message>
+	<message id="GeneralArg">{1}</message>
+	<message id="Input">Input</message>
+  <message id="LibraryVersion">LibraryVersion</message>
+	<message id="Lock Tag">Lock Tag</message>
+	<message id="Output">Output</message>
+	<message id="OnboardLED">Onboard LED</message>
+	<message id="Phidget (Common)">(Common)</message>
+	<message id="PhidgetInterfaceKit">PhidgetInterfaceKit</message>
+	<message id="PhidgetRFID">PhidgetRFID</message>
+	<message id="PHIDGET_RFID_PROTOCOL_EM4100">EM4100 (EM4102) 40-bit</message>
+	<message id="PHIDGET_RFID_PROTOCOL_ISO11785_FDX_B">ISO11785 FDX-B encoding (Animal ID)</message>
+	<message id="PHIDGET_RFID_PROTOCOL_PHIDGETS">"PhidgetTAG Protocol 24 character ASCII</message>
+  <message id="Ratiometric">Ratiometric</message>
+	<message id="SensorArgs">Sensor {1}</message>
+  <message id="SerialNumber">SerialNumber</message>
+	<message id="Tag">Tag</message>
+	<message id="Turn antenna On to read tags">Turn antenna On to read tags</message>
+	<message id="Write Tag">Write Tag</message>
+	<message id="Writing tag failed: ">Writing tag failed: {1}</message>
+</messages>
