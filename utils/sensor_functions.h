@@ -15,7 +15,7 @@
 class SensorFunction
 {
 public:
-	SensorFunction(const Wt::WString& title, Wt::WString (*fptr)(int value), int min_value, int max_value);
+	SensorFunction(const Wt::WString& title, Wt::WString (*fptr)(int value), bool ratiometric, int min_value, int max_value);
 
 public:
 	Wt::WString GetFunctionTitle() {return m_title;}
@@ -24,6 +24,7 @@ public:
 private:
 	const Wt::WString m_title;
 	Wt::WString (CCONV* m_function)(int value);
+	bool m_ratiometric;
 	int m_min_value;
 	int m_max_value;
 };
