@@ -22,6 +22,10 @@ public:
 	void SetValue(int sensor_value);
 	
 private:
+	/* In Wt thread */
+	void OnWtFunctionChanged();
+
+private:
 	PhidgetsInterfaceKit* m_phidget;
 	int m_index;
   Wt::WLineEdit* m_raw_value_edit;

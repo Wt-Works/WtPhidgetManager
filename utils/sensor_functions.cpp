@@ -13,18 +13,29 @@
 Wt::WString DefaultFunction(int value) {return Wt::WString::tr("FunctionDefaultFormat").arg(value);}
 
 
-SensorFunction::SensorFunction(const Wt::WString& title, Wt::WString (*fptr)(int value))
+SensorFunction::SensorFunction(const Wt::WString& title, Wt::WString (*fptr)(int value), int min_value, int max_value)
 : m_title(title),
-  m_function(fptr)
+  m_function(fptr),
+  m_min_value(min_value),
+  m_max_value(max_value)
 {
 }
+
+Wt::WString SensorFunction::ConvertSensorValue(int value)
+{
+	if (m_min_value>value || m_max_value<value)
+		return Wt::WString::tr("Out of range");
+
+	return m_function(value);
+}
+
 
 
 SensorFunctions::SensorFunctions()
 {
 	m_function_count = 1;
 	m_functions = new SensorFunction*[m_function_count];
-	m_functions[0] = new SensorFunction(Wt::WString::tr("FunctionDefault"), &DefaultFunction);
+	m_functions[0] = new SensorFunction(Wt::WString::tr("FunctionDefault"), &DefaultFunction, 0, 1000);
 }
 
 SensorFunctions::~SensorFunctions()

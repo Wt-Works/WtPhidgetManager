@@ -14,6 +14,7 @@
 	<message id="Input">Input</message>
   <message id="LibraryVersion">LibraryVersion</message>
 	<message id="Lock Tag">Lock Tag</message>
+	<message id="Out of range">Out of range</message>
 	<message id="Output">Output</message>
 	<message id="OnboardLED">Onboard LED</message>
 	<message id="Phidget (Common)">(Common)</message>

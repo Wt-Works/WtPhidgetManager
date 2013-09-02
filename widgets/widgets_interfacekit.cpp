@@ -23,6 +23,7 @@
 #include "../phidgets/phidgets_interfacekit.h"
 #include "../phidget_manager.h"
 #include "../utils/sensor_functions.h"
+#include "../utils/string.h"
 
 
 SensorWidget::SensorWidget(PhidgetsInterfaceKit* phidget, int index)
@@ -46,6 +47,7 @@ Wt::WContainerWidget* SensorWidget::CreateWidget()
 
 	m_function_dropdown = new Wt::WComboBox();
 	::GetSensorFunctions()->PopulateDropdown(m_function_dropdown);
+	m_function_dropdown->activated().connect(boost::bind(&SensorWidget::OnWtFunctionChanged, this));
 	hbox->addWidget(m_function_dropdown);
 
   m_converted_value_edit = new Wt::WLineEdit();
@@ -59,6 +61,15 @@ void SensorWidget::SetValue(int sensor_value)
 {
 	m_raw_value_edit->setText(Wt::WString::tr("GeneralArg").arg(sensor_value));
 	m_converted_value_edit->setText(::GetSensorFunctions()->ConvertSensorValue(m_function_dropdown->currentIndex(), sensor_value));
+}
+
+void SensorWidget::OnWtFunctionChanged()
+{
+	const Wt::WString& value = m_raw_value_edit->text();
+	if (value.empty())
+		return;
+
+	SetValue(StringUtil::ToInt(value));
 }
 
 

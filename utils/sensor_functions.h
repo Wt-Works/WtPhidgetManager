@@ -15,15 +15,17 @@
 class SensorFunction
 {
 public:
-	SensorFunction(const Wt::WString& title, Wt::WString (*fptr)(int value));
+	SensorFunction(const Wt::WString& title, Wt::WString (*fptr)(int value), int min_value, int max_value);
 
 public:
 	Wt::WString GetFunctionTitle() {return m_title;}
-	Wt::WString ConvertSensorValue(int value) {return m_function(value);}
+	Wt::WString ConvertSensorValue(int value);
 
 private:
 	const Wt::WString m_title;
 	Wt::WString (CCONV* m_function)(int value);
+	int m_min_value;
+	int m_max_value;
 };
 
 class SensorFunctions
