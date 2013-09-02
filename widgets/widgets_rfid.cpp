@@ -79,6 +79,7 @@ void WidgetsRFID::OnOnboardLEDChanged(bool state)
 void WidgetsRFID::OnRFIDAntennaChanged(bool state)
 {
 	m_antenna_checkbox->setChecked(state != 0);
+	UpdateTagText();
 	GetApplication()->triggerUpdate();
 }
 
@@ -148,17 +149,27 @@ Wt::WContainerWidget* WidgetsRFID::CreateWidget()
 	/* Output */
 	if (EPHIDGET_OK == CPhidgetRFID_getOutputCount(m_phidget->GetNativeHandle(), &int_value))
 	{
+		table->elementAt(row, 0)->addWidget(new Wt::WText(Wt::WString::tr("Output")));
+
+		Wt::WTable* output_table = new Wt::WTable();
+		table->elementAt(row++, 1)->addWidget(output_table);
+		
 		m_output_checkbox_array_length = int_value;
 		m_output_checkbox_array = new Wt::WCheckBox*[m_output_checkbox_array_length];
 
 		for (i=0; i<m_output_checkbox_array_length; i++)
 		{
-      table->elementAt(row, 0)->addWidget(new Wt::WText(Wt::WString::tr("OutputArgs").arg(i)));
-      m_output_checkbox_array[i] = new Wt::WCheckBox();
-      table->elementAt(row++, 1)->addWidget(m_output_checkbox_array[i]);
-
+			m_output_checkbox_array[i] = new Wt::WCheckBox();
 			m_output_checkbox_array[i]->changed().connect(boost::bind(&WidgetsRFID::OnWtOutputStateChanged, this, m_output_checkbox_array[i]));
-      
+
+			Wt::WTableCell* cell = output_table->elementAt(0, i);
+			cell->addWidget(m_output_checkbox_array[i]);
+			cell->setContentAlignment(Wt::AlignCenter|Wt::AlignMiddle);
+			
+			cell = output_table->elementAt(1, i);
+			cell->addWidget(new Wt::WText(Wt::WString::tr("GeneralArg").arg(i)));
+			cell->setContentAlignment(Wt::AlignCenter|Wt::AlignMiddle);
+
       int output_state;
       if (EPHIDGET_OK == CPhidgetRFID_getOutputState(m_phidget->GetNativeHandle(), i, &output_state))
       {
@@ -166,7 +177,7 @@ Wt::WContainerWidget* WidgetsRFID::CreateWidget()
       }
 		}
 	}
-	
+
 	/* Onboard LED */
   table->elementAt(row, 0)->addWidget(new Wt::WText(Wt::WString::tr("OnboardLED")));
   m_onboard_led_checkbox = new Wt::WCheckBox();

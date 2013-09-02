@@ -172,7 +172,7 @@ Wt::WContainerWidget* WidgetsInterfaceKit::CreateWidget()
 		}
 	}
 
-		/* Input */
+	/* Input */
 	if (EPHIDGET_OK == CPhidgetInterfaceKit_getInputCount(m_phidget->GetNativeHandle(), &int_value))
 	{
 		table->elementAt(row, 0)->addWidget(new Wt::WText(Wt::WString::tr("Input")));
@@ -203,7 +203,7 @@ Wt::WContainerWidget* WidgetsInterfaceKit::CreateWidget()
 		}
 	}
 
-		/* Output */
+	/* Output */
 	if (EPHIDGET_OK == CPhidgetInterfaceKit_getOutputCount(m_phidget->GetNativeHandle(), &int_value))
 	{
 		table->elementAt(row, 0)->addWidget(new Wt::WText(Wt::WString::tr("Output")));
