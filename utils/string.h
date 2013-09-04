@@ -15,6 +15,7 @@ class StringUtil
 {
 public:
 	static int ToInt(const Wt::WString& s);
+	static Wt::WString Round(double value);
 };
 
 #endif // _STRING_UTIL_H_

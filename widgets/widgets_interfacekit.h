@@ -15,10 +15,11 @@ class PhidgetsInterfaceKit;
 class SensorWidget
 {
 public:
-	SensorWidget(PhidgetsInterfaceKit* phidget, int index);
+	SensorWidget(PhidgetsInterfaceKit* phidget, int index, bool ratiometric);
 	~SensorWidget();
 
 	Wt::WContainerWidget* CreateWidget();
+	void SetRatiometric(bool ratiometric);
 	void SetValue(int sensor_value);
 	
 private:
@@ -28,9 +29,12 @@ private:
 private:
 	PhidgetsInterfaceKit* m_phidget;
 	int m_index;
+	bool m_ratiometric;
   Wt::WLineEdit* m_raw_value_edit;
 	Wt::WComboBox* m_function_dropdown;
   Wt::WLineEdit* m_converted_value_edit;
+	int m_default_ratiometric_index;
+	int m_default_non_ratiometric_index;
 };
 
 class WidgetsInterfaceKit : public WidgetsCommon
@@ -53,6 +57,9 @@ private:
 	/* In Wt thread */
 	void OnWtRatiometricStateChanged(Wt::WCheckBox* checkbox);
 	void OnWtOutputStateChanged(Wt::WCheckBox* checkbox);
+
+private:
+	void UpdateSensorFunctionDropdowns(bool ratiometric);
 
 private:
 	PhidgetsInterfaceKit* m_phidget;

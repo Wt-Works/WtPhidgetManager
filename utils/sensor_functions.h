@@ -18,8 +18,9 @@ public:
 	SensorFunction(const Wt::WString& title, Wt::WString (*fptr)(int value), bool ratiometric, int min_value, int max_value);
 
 public:
-	Wt::WString GetFunctionTitle() {return m_title;}
+	Wt::WString GetFunctionTitle() const {return m_title;}
 	Wt::WString ConvertSensorValue(int value);
+	bool IsRatiometric() const {return m_ratiometric;}
 
 private:
 	const Wt::WString m_title;
@@ -36,15 +37,19 @@ public:
   ~SensorFunctions();
 	
 public:
-	int GetFunctionCount() const {return m_function_count;}
-	Wt::WString GetFunctionTitle(int index);
-	Wt::WString ConvertSensorValue(int index, int value);
+	Wt::WString GetFunctionTitle(int index, bool ratiometric) const;
+	Wt::WString ConvertSensorValue(int index, int value, bool ratiometric);
 
 public:
-	void PopulateDropdown(Wt::WComboBox* dropdown);
+	void PopulateDropdown(Wt::WComboBox* dropdown, bool ratiometric);
+
+private:
+	int GetFunctionCount(bool ratiometric) const {return ratiometric ? m_ratiometric_count : m_non_ratiometric_count;}
+	SensorFunction* GetFunction(int index, bool ratiometric) const;
 	
 private:
-	int m_function_count;
+	int m_ratiometric_count;
+	int m_non_ratiometric_count;
 	SensorFunction** m_functions;
 };
 
