@@ -26,9 +26,12 @@
 #include "../utils/string.h"
 
 
-SensorWidget::SensorWidget(PhidgetsInterfaceKit* phidget, int index)
+SensorWidget::SensorWidget(PhidgetsInterfaceKit* phidget, int index, bool ratiometric)
 : m_phidget(phidget),
-  m_index(index)
+  m_index(index),
+  m_ratiometric(ratiometric),
+  m_default_ratiometric_index(0),
+  m_default_non_ratiometric_index(0)
 {
 }
 
@@ -46,7 +49,7 @@ Wt::WContainerWidget* SensorWidget::CreateWidget()
 	hbox->addWidget(m_raw_value_edit);
 
 	m_function_dropdown = new Wt::WComboBox();
-	::GetSensorFunctions()->PopulateDropdown(m_function_dropdown);
+	::GetSensorFunctions()->PopulateDropdown(m_function_dropdown, m_ratiometric);
 	m_function_dropdown->activated().connect(boost::bind(&SensorWidget::OnWtFunctionChanged, this));
 	hbox->addWidget(m_function_dropdown);
 
@@ -57,10 +60,23 @@ Wt::WContainerWidget* SensorWidget::CreateWidget()
 	return sensor_container;
 }
 
+void SensorWidget::SetRatiometric(bool ratiometric)
+{
+	if (m_ratiometric)
+		m_default_ratiometric_index = m_function_dropdown->currentIndex();
+	else
+		m_default_non_ratiometric_index = m_function_dropdown->currentIndex();
+
+	m_ratiometric = ratiometric;
+	::GetSensorFunctions()->PopulateDropdown(m_function_dropdown, m_ratiometric);
+	m_function_dropdown->setCurrentIndex(m_ratiometric ? m_default_ratiometric_index : m_default_non_ratiometric_index);
+	OnWtFunctionChanged();
+}
+
 void SensorWidget::SetValue(int sensor_value)
 {
 	m_raw_value_edit->setText(Wt::WString::tr("GeneralArg").arg(sensor_value));
-	m_converted_value_edit->setText(::GetSensorFunctions()->ConvertSensorValue(m_function_dropdown->currentIndex(), sensor_value));
+	m_converted_value_edit->setText(::GetSensorFunctions()->ConvertSensorValue(m_function_dropdown->currentIndex(), sensor_value, m_ratiometric));
 }
 
 void SensorWidget::OnWtFunctionChanged()
@@ -125,7 +141,11 @@ void WidgetsInterfaceKit::OnDigitalOutputChanged(int index, bool state)
 
 void WidgetsInterfaceKit::OnRatiometricChanged(bool state)
 {
-	m_ratiometric_checkbox->setChecked(state != 0);
+	bool ratiometric = (state != 0);
+	m_ratiometric_checkbox->setChecked(ratiometric);
+
+	UpdateSensorFunctionDropdowns(ratiometric);
+
 	GetApplication()->triggerUpdate();
 }
 
@@ -156,6 +176,7 @@ Wt::WContainerWidget* WidgetsInterfaceKit::CreateWidget()
 
 	int row = 0;
   int i, int_value;
+	bool ratiometric = true;
 
 	/* Ratiometric */
   table->elementAt(row, 0)->addWidget(new Wt::WText(Wt::WString::tr("Ratiometric")));
@@ -164,7 +185,8 @@ Wt::WContainerWidget* WidgetsInterfaceKit::CreateWidget()
 	m_ratiometric_checkbox->changed().connect(boost::bind(&WidgetsInterfaceKit::OnWtRatiometricStateChanged, this, m_ratiometric_checkbox));
   if (EPHIDGET_OK == CPhidgetInterfaceKit_getRatiometric(m_phidget->GetNativeHandle(), &int_value))
   {
-    m_ratiometric_checkbox->setChecked(PTRUE == int_value);
+		ratiometric = (PTRUE == int_value);
+    m_ratiometric_checkbox->setChecked(ratiometric);
   }
 
   /* Sensors */
@@ -175,7 +197,7 @@ Wt::WContainerWidget* WidgetsInterfaceKit::CreateWidget()
 
 		for (i=0; i<m_sensor_widget_array_length; i++)
 		{
-			m_sensor_widget_array[i] = new SensorWidget(m_phidget, i);
+			m_sensor_widget_array[i] = new SensorWidget(m_phidget, i, ratiometric);
 
 			table->elementAt(row, 0)->addWidget(new Wt::WText(Wt::WString::tr("SensorArgs").arg(i)));
 
@@ -256,9 +278,13 @@ Wt::WContainerWidget* WidgetsInterfaceKit::CreateWidget()
 
 void WidgetsInterfaceKit::OnWtRatiometricStateChanged(Wt::WCheckBox* checkbox)
 {
-	bool check = checkbox->isChecked();
-	CPhidgetInterfaceKit_setRatiometric(m_phidget->GetNativeHandle(), check ? PTRUE : PFALSE);
-	::GetApplicationManager()->OnWtRatiometricChanged(GetApplication(), GetSerial(), check);
+	bool ratiometric = checkbox->isChecked();
+	CPhidgetInterfaceKit_setRatiometric(m_phidget->GetNativeHandle(), ratiometric ? PTRUE : PFALSE);
+	::GetApplicationManager()->OnWtRatiometricChanged(GetApplication(), GetSerial(), ratiometric);
+
+	UpdateSensorFunctionDropdowns(ratiometric);
+
+	GetApplication()->triggerUpdate();
 }
 
 void WidgetsInterfaceKit::OnWtOutputStateChanged(Wt::WCheckBox* checkbox)
@@ -273,5 +299,14 @@ void WidgetsInterfaceKit::OnWtOutputStateChanged(Wt::WCheckBox* checkbox)
 			::GetApplicationManager()->OnWtDigitalOutputChanged(GetApplication(), GetSerial(), i, check);
 			break;
 		}
+	}
+}
+
+void WidgetsInterfaceKit::UpdateSensorFunctionDropdowns(bool ratiometric)
+{
+	int i;
+	for (i=0; m_sensor_widget_array_length>i; i++)
+	{
+		m_sensor_widget_array[i]->SetRatiometric(ratiometric);
 	}
 }
