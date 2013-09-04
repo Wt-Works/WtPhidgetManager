@@ -88,7 +88,9 @@ void PhidgetApplication::SetWidget(int serial, WidgetsCommon* widget, const Wt::
 	
 	item->m_widget = widget;
 
-	m_tab_widget->addTab(item->m_widget->GetWidget(), label, Wt::WTabWidget::PreLoading);
+	Wt::WContainerWidget* tab_widget = item->m_widget->GetWidget();
+	m_tab_widget->addTab(tab_widget, label, Wt::WTabWidget::PreLoading);
+	m_tab_widget->setCurrentWidget(tab_widget);
 
 	Unlock();
 
