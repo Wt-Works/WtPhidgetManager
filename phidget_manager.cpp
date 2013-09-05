@@ -9,6 +9,7 @@
 
 #include "app.h"
 #include "app_manager.h"
+#include "phidgets/phidgets_advancedservo.h"
 #include "phidgets/phidgets_interfacekit.h"
 #include "phidgets/phidgets_manager.h"
 #include "phidgets/phidgets_rfid.h"
@@ -100,6 +101,7 @@ int PhidgetManager::OnAttach(CPhidgetHandle handle)
 
 		switch(device_class)
 		{
+			case PHIDCLASS_ADVANCEDSERVO: item = new PhidgetsAdvancedServo(serial); break;
 			case PHIDCLASS_INTERFACEKIT: item = new PhidgetsInterfaceKit(serial); break;
 			case PHIDCLASS_RFID: item = new PhidgetsRFID(serial); break;
 			default: {

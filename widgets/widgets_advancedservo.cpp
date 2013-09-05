@@ -1,0 +1,324 @@
+/*
+ *  widgets_advancedservo.cpp
+ *
+ *  Created by Frode Roxrud Gill, 2013.
+ *  This code is GPLv3.
+ */
+
+#include "widgets_advancedservo.h"
+#if 0
+#include <Wt/WCheckBox>
+#include <Wt/WComboBox>
+#include <Wt/WGroupBox>
+#include <Wt/WHBoxLayout>
+#include <Wt/WLineEdit>
+#include <Wt/WServer>
+#include <Wt/WTable>
+#include <Wt/WTableCell>
+#include <Wt/WText>
+#include <Wt/WVBoxLayout>
+#endif
+#include "../app.h"
+#include "../app_manager.h"
+#include "../phidgets/phidgets_advancedservo.h"
+#include "../phidget_manager.h"
+#if 0
+#include "../utils/sensor_functions.h"
+#include "../utils/string.h"
+#endif
+
+ServoWidget::ServoWidget(PhidgetsAdvancedServo* phidget, int index)
+: m_phidget(phidget),
+  m_index(index)
+#if 0
+	,
+  m_ratiometric(ratiometric),
+  m_default_ratiometric_index(0),
+  m_default_non_ratiometric_index(0)
+#endif
+{
+}
+
+ServoWidget::~ServoWidget()
+{
+}
+
+Wt::WContainerWidget* ServoWidget::CreateWidget()
+{
+	Wt::WContainerWidget* servo_container = new Wt::WContainerWidget();
+#if 0
+  Wt::WHBoxLayout* hbox = new Wt::WHBoxLayout(sensor_container);
+
+  m_raw_value_edit = new Wt::WLineEdit();
+	m_raw_value_edit->setEnabled(false);
+	hbox->addWidget(m_raw_value_edit);
+
+	m_function_dropdown = new Wt::WComboBox();
+	::GetSensorFunctions()->PopulateDropdown(m_function_dropdown, m_ratiometric);
+	m_function_dropdown->activated().connect(boost::bind(&SensorWidget::OnWtFunctionChanged, this));
+	hbox->addWidget(m_function_dropdown);
+
+  m_converted_value_edit = new Wt::WLineEdit();
+	m_converted_value_edit->setEnabled(false);
+	hbox->addWidget(m_converted_value_edit);
+#endif
+	return servo_container;
+}
+#if 0
+void SensorWidget::SetRatiometric(bool ratiometric)
+{
+	if (m_ratiometric)
+		m_default_ratiometric_index = m_function_dropdown->currentIndex();
+	else
+		m_default_non_ratiometric_index = m_function_dropdown->currentIndex();
+
+	m_ratiometric = ratiometric;
+	::GetSensorFunctions()->PopulateDropdown(m_function_dropdown, m_ratiometric);
+	m_function_dropdown->setCurrentIndex(m_ratiometric ? m_default_ratiometric_index : m_default_non_ratiometric_index);
+	OnWtFunctionChanged();
+}
+
+void SensorWidget::SetValue(int sensor_value)
+{
+	m_raw_value_edit->setText(Wt::WString::tr("GeneralArg").arg(sensor_value));
+	m_converted_value_edit->setText(::GetSensorFunctions()->ConvertSensorValue(m_function_dropdown->currentIndex(), sensor_value, m_ratiometric));
+}
+
+void SensorWidget::OnWtFunctionChanged()
+{
+	const Wt::WString& value = m_raw_value_edit->text();
+	if (value.empty())
+		return;
+
+	SetValue(StringUtil::ToInt(value));
+}
+#endif
+
+
+WidgetsAdvancedServo::WidgetsAdvancedServo(PhidgetsAdvancedServo* phidget, PhidgetApplication* application)
+: WidgetsCommon(application),
+  m_phidget(phidget)
+#if 0
+	,
+  m_ratiometric_checkbox(NULL),
+	m_sensor_widget_array(NULL),
+	m_sensor_widget_array_length(0),
+  m_input_checkbox_array(NULL),
+  m_input_checkbox_array_length(0),
+  m_output_checkbox_array(NULL),
+  m_output_checkbox_array_length(0)
+#endif
+{
+}
+
+WidgetsAdvancedServo::~WidgetsAdvancedServo()
+{
+#if 0
+	int i;
+	for (i=0; i<m_sensor_widget_array_length; i++)
+	{
+		delete m_sensor_widget_array[i];
+	}
+	delete[] m_sensor_widget_array;
+
+	//delete[] m_input_checkbox_array; //Deleted by Wt
+	//delete[] m_output_checkbox_array; //Deleted by Wt
+#endif
+}
+
+int WidgetsAdvancedServo::GetSerial()
+{
+	return m_phidget->GetSerial();
+}
+#if 0
+void WidgetsInterfaceKit::OnDigitalInputChanged(int index, bool state)
+{
+	if (0<=index && m_input_checkbox_array_length>index)
+	{
+		m_input_checkbox_array[index]->setChecked(state != 0);
+		GetApplication()->triggerUpdate();
+	}
+}
+
+void WidgetsInterfaceKit::OnDigitalOutputChanged(int index, bool state)
+{
+	if (0<=index && m_output_checkbox_array_length>index)
+	{
+		m_output_checkbox_array[index]->setChecked(state != 0);
+		GetApplication()->triggerUpdate();
+	}
+}
+
+void WidgetsInterfaceKit::OnRatiometricChanged(bool state)
+{
+	bool ratiometric = (state != 0);
+	m_ratiometric_checkbox->setChecked(ratiometric);
+
+	UpdateSensorFunctionDropdowns(ratiometric);
+
+	GetApplication()->triggerUpdate();
+}
+
+void WidgetsInterfaceKit::OnSensorChanged(int index, int sensor_value)
+{
+	if (0<=index && m_sensor_widget_array_length>index)
+	{
+		m_sensor_widget_array[index]->SetValue(sensor_value);
+		GetApplication()->triggerUpdate();
+	}
+}
+#endif
+
+Wt::WContainerWidget* WidgetsAdvancedServo::CreateWidget()
+{
+	Wt::WContainerWidget* tab_container = new Wt::WContainerWidget();
+#if 0
+  Wt::WVBoxLayout* vbox = new Wt::WVBoxLayout(tab_container);
+	
+	Wt::WGroupBox* spesific_box = new Wt::WGroupBox(Wt::WString::tr("PhidgetInterfaceKit"));
+	vbox->addWidget(spesific_box);
+
+  Wt::WHBoxLayout* hbox = new Wt::WHBoxLayout(spesific_box);
+	Wt::WTable* table = new Wt::WTable();
+	hbox->addWidget(table);
+
+	table->columnAt(0)->setWidth(GetLeftColumnWidth());
+	table->columnAt(1)->setWidth(Wt::WLength::Auto);
+
+	int row = 0;
+  int i, int_value;
+	bool ratiometric = true;
+
+	/* Ratiometric */
+  table->elementAt(row, 0)->addWidget(new Wt::WText(Wt::WString::tr("Ratiometric")));
+  m_ratiometric_checkbox = new Wt::WCheckBox();
+  table->elementAt(row++, 1)->addWidget(m_ratiometric_checkbox);
+	m_ratiometric_checkbox->changed().connect(boost::bind(&WidgetsInterfaceKit::OnWtRatiometricStateChanged, this, m_ratiometric_checkbox));
+  if (EPHIDGET_OK == CPhidgetInterfaceKit_getRatiometric(m_phidget->GetNativeHandle(), &int_value))
+  {
+		ratiometric = (PTRUE == int_value);
+    m_ratiometric_checkbox->setChecked(ratiometric);
+  }
+
+  /* Sensors */
+	if (EPHIDGET_OK == CPhidgetInterfaceKit_getSensorCount(m_phidget->GetNativeHandle(), &int_value))
+	{
+		m_sensor_widget_array_length = int_value;
+		m_sensor_widget_array = new SensorWidget*[m_sensor_widget_array_length];
+
+		for (i=0; i<m_sensor_widget_array_length; i++)
+		{
+			m_sensor_widget_array[i] = new SensorWidget(m_phidget, i, ratiometric);
+
+			table->elementAt(row, 0)->addWidget(new Wt::WText(Wt::WString::tr("SensorArgs").arg(i)));
+
+      table->elementAt(row++, 1)->addWidget(m_sensor_widget_array[i]->CreateWidget());
+		}
+	}
+
+	/* Input */
+	if (EPHIDGET_OK == CPhidgetInterfaceKit_getInputCount(m_phidget->GetNativeHandle(), &int_value))
+	{
+		table->elementAt(row, 0)->addWidget(new Wt::WText(Wt::WString::tr("Input")));
+
+		Wt::WTable* input_table = new Wt::WTable();
+		table->elementAt(row++, 1)->addWidget(input_table);
+		
+		m_input_checkbox_array_length = int_value;
+		m_input_checkbox_array = new Wt::WCheckBox*[m_input_checkbox_array_length];
+
+		for (i=0; i<m_input_checkbox_array_length; i++)
+		{
+			m_input_checkbox_array[i] = new Wt::WCheckBox();
+			Wt::WTableCell* cell = input_table->elementAt(0, i);
+			cell->addWidget(m_input_checkbox_array[i]);
+			cell->setContentAlignment(Wt::AlignCenter|Wt::AlignMiddle);
+			
+			cell = input_table->elementAt(1, i);
+			cell->addWidget(new Wt::WText(Wt::WString::tr("GeneralArg").arg(i)));
+			cell->setContentAlignment(Wt::AlignCenter|Wt::AlignMiddle);
+
+			int input_state;
+			if (EPHIDGET_OK == CPhidgetInterfaceKit_getInputState(m_phidget->GetNativeHandle(), i, &input_state))
+			{
+				m_input_checkbox_array[i]->setChecked(PTRUE == input_state);
+			}
+			m_input_checkbox_array[i]->setEnabled(false);
+		}
+	}
+
+	/* Output */
+	if (EPHIDGET_OK == CPhidgetInterfaceKit_getOutputCount(m_phidget->GetNativeHandle(), &int_value))
+	{
+		table->elementAt(row, 0)->addWidget(new Wt::WText(Wt::WString::tr("Output")));
+
+		Wt::WTable* output_table = new Wt::WTable();
+		table->elementAt(row++, 1)->addWidget(output_table);
+		
+		m_output_checkbox_array_length = int_value;
+		m_output_checkbox_array = new Wt::WCheckBox*[m_output_checkbox_array_length];
+
+		for (i=0; i<m_output_checkbox_array_length; i++)
+		{
+			m_output_checkbox_array[i] = new Wt::WCheckBox();
+			m_output_checkbox_array[i]->changed().connect(boost::bind(&WidgetsInterfaceKit::OnWtOutputStateChanged, this, m_output_checkbox_array[i]));
+
+			Wt::WTableCell* cell = output_table->elementAt(0, i);
+			cell->addWidget(m_output_checkbox_array[i]);
+			cell->setContentAlignment(Wt::AlignCenter|Wt::AlignMiddle);
+			
+			cell = output_table->elementAt(1, i);
+			cell->addWidget(new Wt::WText(Wt::WString::tr("GeneralArg").arg(i)));
+			cell->setContentAlignment(Wt::AlignCenter|Wt::AlignMiddle);
+
+      int output_state;
+      if (EPHIDGET_OK == CPhidgetInterfaceKit_getOutputState(m_phidget->GetNativeHandle(), i, &output_state))
+      {
+        m_output_checkbox_array[i]->setChecked(PTRUE == output_state);
+      }
+		}
+	}
+
+	Wt::WGroupBox* generic_box = new Wt::WGroupBox(Wt::WString::tr("Phidget (Common)"));
+	vbox->addWidget(generic_box);
+
+	generic_box->addWidget(WidgetsCommon::CreateWidget());
+#endif
+	return tab_container;
+}
+#if 0
+void WidgetsInterfaceKit::OnWtRatiometricStateChanged(Wt::WCheckBox* checkbox)
+{
+	bool ratiometric = checkbox->isChecked();
+	CPhidgetInterfaceKit_setRatiometric(m_phidget->GetNativeHandle(), ratiometric ? PTRUE : PFALSE);
+	::GetApplicationManager()->OnWtRatiometricChanged(GetApplication(), GetSerial(), ratiometric);
+
+	UpdateSensorFunctionDropdowns(ratiometric);
+
+	GetApplication()->triggerUpdate();
+}
+
+void WidgetsInterfaceKit::OnWtOutputStateChanged(Wt::WCheckBox* checkbox)
+{
+	int i;
+	for (i=0; i<m_output_checkbox_array_length; i++)
+	{
+		if (checkbox == m_output_checkbox_array[i])
+		{
+			bool check = checkbox->isChecked();
+			CPhidgetInterfaceKit_setOutputState(m_phidget->GetNativeHandle(), i, check ? PTRUE : PFALSE);
+			::GetApplicationManager()->OnWtDigitalOutputChanged(GetApplication(), GetSerial(), i, check);
+			break;
+		}
+	}
+}
+
+void WidgetsInterfaceKit::UpdateSensorFunctionDropdowns(bool ratiometric)
+{
+	int i;
+	for (i=0; m_sensor_widget_array_length>i; i++)
+	{
+		m_sensor_widget_array[i]->SetRatiometric(ratiometric);
+	}
+}
+#endif
