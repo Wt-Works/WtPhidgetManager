@@ -6,11 +6,12 @@
  */
 
 #include "widgets_advancedservo.h"
+#include <Wt/WHBoxLayout>
+#include <Wt/WSlider>
 #if 0
 #include <Wt/WCheckBox>
 #include <Wt/WComboBox>
 #include <Wt/WGroupBox>
-#include <Wt/WHBoxLayout>
 #include <Wt/WLineEdit>
 #include <Wt/WServer>
 #include <Wt/WTable>
@@ -30,12 +31,6 @@
 ServoWidget::ServoWidget(PhidgetsAdvancedServo* phidget, int index)
 : m_phidget(phidget),
   m_index(index)
-#if 0
-	,
-  m_ratiometric(ratiometric),
-  m_default_ratiometric_index(0),
-  m_default_non_ratiometric_index(0)
-#endif
 {
 }
 
@@ -46,12 +41,11 @@ ServoWidget::~ServoWidget()
 Wt::WContainerWidget* ServoWidget::CreateWidget()
 {
 	Wt::WContainerWidget* servo_container = new Wt::WContainerWidget();
-#if 0
-  Wt::WHBoxLayout* hbox = new Wt::WHBoxLayout(sensor_container);
+  Wt::WHBoxLayout* hbox = new Wt::WHBoxLayout(servo_container);
 
-  m_raw_value_edit = new Wt::WLineEdit();
-	m_raw_value_edit->setEnabled(false);
-	hbox->addWidget(m_raw_value_edit);
+  m_position_slider = new Wt::WSlider();
+	hbox->addWidget(m_position_slider);
+#if 0
 
 	m_function_dropdown = new Wt::WComboBox();
 	::GetSensorFunctions()->PopulateDropdown(m_function_dropdown, m_ratiometric);
@@ -64,6 +58,20 @@ Wt::WContainerWidget* ServoWidget::CreateWidget()
 #endif
 	return servo_container;
 }
+
+void ServoWidget::SetVelocity(double UNUSED(velocity))
+{
+}
+
+void ServoWidget::SetPosition(double position)
+{
+	m_position_slider->setValue(position);
+}
+
+void ServoWidget::SetCurrent(double UNUSED(current))
+{
+}
+
 #if 0
 void SensorWidget::SetRatiometric(bool ratiometric)
 {
@@ -97,33 +105,20 @@ void SensorWidget::OnWtFunctionChanged()
 
 WidgetsAdvancedServo::WidgetsAdvancedServo(PhidgetsAdvancedServo* phidget, PhidgetApplication* application)
 : WidgetsCommon(application),
-  m_phidget(phidget)
-#if 0
-	,
-  m_ratiometric_checkbox(NULL),
-	m_sensor_widget_array(NULL),
-	m_sensor_widget_array_length(0),
-  m_input_checkbox_array(NULL),
-  m_input_checkbox_array_length(0),
-  m_output_checkbox_array(NULL),
-  m_output_checkbox_array_length(0)
-#endif
+  m_phidget(phidget),
+	m_servo_widget_array(NULL),
+	m_servo_widget_array_length(0)
 {
 }
 
 WidgetsAdvancedServo::~WidgetsAdvancedServo()
 {
-#if 0
 	int i;
-	for (i=0; i<m_sensor_widget_array_length; i++)
+	for (i=0; i<m_servo_widget_array_length; i++)
 	{
-		delete m_sensor_widget_array[i];
+		delete m_servo_widget_array[i];
 	}
-	delete[] m_sensor_widget_array;
-
-	//delete[] m_input_checkbox_array; //Deleted by Wt
-	//delete[] m_output_checkbox_array; //Deleted by Wt
-#endif
+	delete[] m_servo_widget_array;
 }
 
 int WidgetsAdvancedServo::GetSerial()
@@ -131,58 +126,32 @@ int WidgetsAdvancedServo::GetSerial()
 	return m_phidget->GetSerial();
 }
 
-void OnServoVelocityChanged(int index, double velocity)
+void WidgetsAdvancedServo::OnServoVelocityChanged(int index, double velocity)
 {
-	//ToDo
-}
-
-void OnServoPositionChanged(int index, double position)
-{
-	//ToDo
-}
-
-void OnServoCurrentChanged(int index, double current)
-{
-	//ToDo
-}
-#if 0
-void WidgetsInterfaceKit::OnDigitalInputChanged(int index, bool state)
-{
-	if (0<=index && m_input_checkbox_array_length>index)
+	if (0<=index && m_servo_widget_array_length>index)
 	{
-		m_input_checkbox_array[index]->setChecked(state != 0);
+		m_servo_widget_array[index]->SetVelocity(velocity);
 		GetApplication()->triggerUpdate();
 	}
 }
 
-void WidgetsInterfaceKit::OnDigitalOutputChanged(int index, bool state)
+void WidgetsAdvancedServo::OnServoPositionChanged(int index, double position)
 {
-	if (0<=index && m_output_checkbox_array_length>index)
+	if (0<=index && m_servo_widget_array_length>index)
 	{
-		m_output_checkbox_array[index]->setChecked(state != 0);
+		m_servo_widget_array[index]->SetPosition(position);
 		GetApplication()->triggerUpdate();
 	}
 }
 
-void WidgetsInterfaceKit::OnRatiometricChanged(bool state)
+void WidgetsAdvancedServo::OnServoCurrentChanged(int index, double current)
 {
-	bool ratiometric = (state != 0);
-	m_ratiometric_checkbox->setChecked(ratiometric);
-
-	UpdateSensorFunctionDropdowns(ratiometric);
-
-	GetApplication()->triggerUpdate();
-}
-
-void WidgetsInterfaceKit::OnSensorChanged(int index, int sensor_value)
-{
-	if (0<=index && m_sensor_widget_array_length>index)
+	if (0<=index && m_servo_widget_array_length>index)
 	{
-		m_sensor_widget_array[index]->SetValue(sensor_value);
+		m_servo_widget_array[index]->SetCurrent(current);
 		GetApplication()->triggerUpdate();
 	}
 }
-#endif
 
 Wt::WContainerWidget* WidgetsAdvancedServo::CreateWidget()
 {
