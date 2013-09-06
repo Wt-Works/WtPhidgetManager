@@ -187,6 +187,21 @@ void PhidgetApplication::OnSensorChanged(int serial, int index, int sensor_value
 	SYNC_WIDGET2(OnSensorChanged, index, sensor_value);
 }
 
+void PhidgetApplication::OnServoVelocityChanged(int serial, int index, double velocity)
+{
+	SYNC_WIDGET2(OnServoVelocityChanged, index, velocity);
+}
+
+void PhidgetApplication::OnServoPositionChanged(int serial, int index, double position)
+{
+	SYNC_WIDGET2(OnServoPositionChanged, index, position);
+}
+
+void PhidgetApplication::OnServoCurrentChanged(int serial, int index, double current)
+{
+	SYNC_WIDGET2(OnServoCurrentChanged, index, current);
+}
+
 void PhidgetApplication::OnTagWritten(int serial, const char* new_tag, CPhidgetRFID_Protocol protocol)
 {
 	SYNC_WIDGET2(OnTagWritten, new_tag, protocol);

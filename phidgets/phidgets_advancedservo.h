@@ -28,10 +28,10 @@ public:
 public:
 	int OnPhidgetAttach(CPhidgetHandle handle);
 	int OnPhidgetDetach(CPhidgetHandle handle);
-#if 0
-	int OnPhidgetInputChangeHandler(CPhidgetAdvancedServoHandle handle, int index, int input_state);
-	int OnPhidgetSensorChangeHandler(CPhidgetAdvancedServoHandle handle, int index, int sensor_value);
-#endif
+	int OnVelocityChangeHandler(CPhidgetAdvancedServoHandle handle, int index, double velocity);
+	int OnPositionChangeHandler(CPhidgetAdvancedServoHandle handle, int index, double position);
+	int OnCurrentChangeHandler(CPhidgetAdvancedServoHandle handle, int index, double current);
+
 private:
 	CPhidgetAdvancedServoHandle m_advancedservo_handle;
 };

@@ -43,6 +43,9 @@ public:
 	void OnRatiometricChanged(int serial, bool state);
 	void OnRFIDAntennaChanged(int serial, bool state);
   void OnSensorChanged(int serial, int index, int sensor_value);
+	void OnServoVelocityChanged(int serial, int index, double velocity);
+	void OnServoPositionChanged(int serial, int index, double position);
+	void OnServoCurrentChanged(int serial, int index, double current);
 	void OnTagWritten(int serial, const char* new_tag, CPhidgetRFID_Protocol protocol);
 
 private:

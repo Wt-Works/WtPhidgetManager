@@ -117,6 +117,21 @@ void ApplicationManager::OnPhidgetSensorChanged(int serial, int index, int senso
 	NOTIFY_APP2(OnSensorChanged, index, sensor_value);
 }
 
+void ApplicationManager::OnPhidgetServoVelocityChanged(int serial, int index, double velocity)
+{
+	NOTIFY_APP2(OnServoVelocityChanged, index, velocity);
+}
+
+void ApplicationManager::OnPhidgetServoPositionChanged(int serial, int index, double position)
+{
+	NOTIFY_APP2(OnServoPositionChanged, index, position);
+}
+
+void ApplicationManager::OnPhidgetServoCurrentChanged(int serial, int index, double current)
+{
+	NOTIFY_APP2(OnServoCurrentChanged, index, current);
+}
+
 void ApplicationManager::OnWtDigitalOutputChanged(const PhidgetApplication* trigger_app, int serial, int index, bool state)
 {
 	SYNC_APP2(OnDigitalOutputChanged, index, state);

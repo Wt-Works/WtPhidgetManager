@@ -49,6 +49,9 @@ public:
 
 public: //From WidgetsCommon
 	virtual int GetSerial();
+	virtual void OnServoVelocityChanged(int index, double velocity);
+	virtual void OnServoPositionChanged(int index, double position);
+	virtual void OnServoCurrentChanged(int index, double current);
 #if 0
 	virtual void OnDigitalInputChanged(int index, bool state);
   virtual void OnDigitalOutputChanged(int index, bool state);

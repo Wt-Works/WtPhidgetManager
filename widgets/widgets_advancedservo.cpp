@@ -130,6 +130,21 @@ int WidgetsAdvancedServo::GetSerial()
 {
 	return m_phidget->GetSerial();
 }
+
+void OnServoVelocityChanged(int index, double velocity)
+{
+	//ToDo
+}
+
+void OnServoPositionChanged(int index, double position)
+{
+	//ToDo
+}
+
+void OnServoCurrentChanged(int index, double current)
+{
+	//ToDo
+}
 #if 0
 void WidgetsInterfaceKit::OnDigitalInputChanged(int index, bool state)
 {

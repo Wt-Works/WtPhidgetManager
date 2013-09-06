@@ -26,17 +26,22 @@ int OnPhidgetDetachAdvancedServo(CPhidgetHandle handle, void* ptr)
 	delete as;
 	return status;
 }
-#if 0
-int OnPhidgetInputChangeHandler(CPhidgetInterfaceKitHandle handle, void* ptr, int index, int input_state)
+
+int OnVelocityChangeHandler(CPhidgetAdvancedServoHandle handle, void* ptr, int index, double velocity)
 {
-  return static_cast<PhidgetsInterfaceKit*>(ptr)->OnPhidgetInputChangeHandler(handle, index, input_state);
+	return static_cast<PhidgetsAdvancedServo*>(ptr)->OnVelocityChangeHandler(handle, index, velocity);
 }
 
-int OnPhidgetSensorChangeHandler(CPhidgetInterfaceKitHandle handle, void* ptr, int index, int sensor_value)
+int OnPositionChangeHandler(CPhidgetAdvancedServoHandle handle, void* ptr, int index, double position)
 {
-  return static_cast<PhidgetsInterfaceKit*>(ptr)->OnPhidgetSensorChangeHandler(handle, index, sensor_value);
+	return static_cast<PhidgetsAdvancedServo*>(ptr)->OnPositionChangeHandler(handle, index, position);
 }
-#endif
+
+int OnCurrentChangeHandler(CPhidgetAdvancedServoHandle handle, void* ptr, int index, double current)
+{
+	return static_cast<PhidgetsAdvancedServo*>(ptr)->OnCurrentChangeHandler(handle, index, current);
+}
+ 
 
 PhidgetsAdvancedServo::PhidgetsAdvancedServo(int serial)
 : PhidgetsCommon(serial),
@@ -103,22 +108,30 @@ int PhidgetsAdvancedServo::OnPhidgetDetach(CPhidgetHandle handle)
 	::GetPhidgetManager()->OnDetach(GetSerial());
 	return EPHIDGET_OK;
 }
-#if 0
-int PhidgetsInterfaceKit::OnPhidgetInputChangeHandler(CPhidgetInterfaceKitHandle handle, int index, int input_state)
+
+int PhidgetsAdvancedServo::OnVelocityChangeHandler(CPhidgetAdvancedServoHandle handle, int index, double velocity)
 {
 	if (handle != GetNativeHandle())
 		return EPHIDGET_UNEXPECTED;
 
-	::GetApplicationManager()->OnPhidgetDigitalInputChanged(GetSerial(), index, PTRUE==input_state);
+	::GetApplicationManager()->OnPhidgetServoVelocityChanged(GetSerial(), index, velocity);
 	return EPHIDGET_OK;
 }
 
-int PhidgetsInterfaceKit::OnPhidgetSensorChangeHandler(CPhidgetInterfaceKitHandle handle, int index, int sensor_value)
+int PhidgetsAdvancedServo::OnPositionChangeHandler(CPhidgetAdvancedServoHandle handle, int index, double position)
 {
 	if (handle != GetNativeHandle())
 		return EPHIDGET_UNEXPECTED;
 
-	::GetApplicationManager()->OnPhidgetSensorChanged(GetSerial(), index, sensor_value);
+	::GetApplicationManager()->OnPhidgetServoPositionChanged(GetSerial(), index, position);
 	return EPHIDGET_OK;
 }
-#endif
+
+int PhidgetsAdvancedServo::OnCurrentChangeHandler(CPhidgetAdvancedServoHandle handle, int index, double current)
+{
+	if (handle != GetNativeHandle())
+		return EPHIDGET_UNEXPECTED;
+
+	::GetApplicationManager()->OnPhidgetServoCurrentChanged(GetSerial(), index, current);
+	return EPHIDGET_OK;
+}

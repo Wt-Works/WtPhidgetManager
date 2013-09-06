@@ -12,6 +12,8 @@
 #include <Wt/WLength>
 #include "phidget21.h"
 
+#include "../global.h"
+
 
 class PhidgetApplication;
 class PhidgetsCommon;
@@ -23,15 +25,18 @@ public:
   virtual ~WidgetsCommon();
 
 public:
-	virtual void OnDigitalInputChanged(int /*index*/, bool /*state*/) {}
-  virtual void OnDigitalOutputChanged(int /*index*/, bool /*state*/) {}
-  virtual void OnGotRFIDTag(const char* /*tag*/, CPhidgetRFID_Protocol /*protocol*/) {}
+	virtual void OnDigitalInputChanged(int UNUSED(index), bool UNUSED(state)) {}
+  virtual void OnDigitalOutputChanged(int UNUSED(index), bool UNUSED(state)) {}
+  virtual void OnGotRFIDTag(const char* UNUSED(tag), CPhidgetRFID_Protocol UNUSED(protocol)) {}
   virtual void OnLostRFIDTag() {}
-	virtual void OnOnboardLEDChanged(bool /*state*/) {}
-	virtual void OnRFIDAntennaChanged(bool /*state*/) {}
-	virtual void OnRatiometricChanged(bool /*state*/) {}
-  virtual void OnSensorChanged(int /*index*/, int /*sensor_value*/) {}
-	virtual void OnTagWritten(const char* /*new_tag*/, CPhidgetRFID_Protocol /*protocol*/) {}
+	virtual void OnOnboardLEDChanged(bool UNUSED(state)) {}
+	virtual void OnRFIDAntennaChanged(bool UNUSED(state)) {}
+	virtual void OnRatiometricChanged(bool UNUSED(state)) {}
+  virtual void OnSensorChanged(int UNUSED(index), int UNUSED(sensor_value)) {}
+	virtual void OnServoVelocityChanged(int UNUSED(index), double UNUSED(velocity)) {}
+	virtual void OnServoPositionChanged(int UNUSED(index), double UNUSED(position)) {}
+	virtual void OnServoCurrentChanged(int UNUSED(index), double UNUSED(current)) {}
+	virtual void OnTagWritten(const char* UNUSED(new_tag), CPhidgetRFID_Protocol UNUSED(protocol)) {}
 
 public:
 	Wt::WContainerWidget* GetWidget();

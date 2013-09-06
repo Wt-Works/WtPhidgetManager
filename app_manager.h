@@ -37,6 +37,9 @@ public: //Events from physical Phidgets
   void OnPhidgetGotRFIDTag(int serial, const char* tag, CPhidgetRFID_Protocol protocol);
   void OnPhidgetLostRFIDTag(int serial);
   void OnPhidgetSensorChanged(int serial, int index, int sensor_value);
+	void OnPhidgetServoVelocityChanged(int serial, int index, double velocity);
+	void OnPhidgetServoPositionChanged(int serial, int index, double position);
+	void OnPhidgetServoCurrentChanged(int serial, int index, double current);
 
 public: //Events from browser. Sync other applications
 	void OnWtDigitalOutputChanged(const PhidgetApplication* trigger_app, int serial, int index, bool state);
