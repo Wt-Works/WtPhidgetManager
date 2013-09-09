@@ -34,6 +34,10 @@ ApplicationManager* GetApplicationManager() {return g_application_manager;}
 SensorFunctions* g_sensor_functions;
 SensorFunctions* GetSensorFunctions() {return g_sensor_functions;}
 
+//The one and only ServoUtils
+ServoUtils* g_servo_utils;
+ServoUtils* GetServoUtils() {return g_servo_utils;}
+
 
 Wt::WApplication* createApplication(const Wt::WEnvironment& env)
 {

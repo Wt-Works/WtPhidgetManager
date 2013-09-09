@@ -29,6 +29,10 @@ class SensorFunctions;
 extern SensorFunctions* g_sensor_functions;
 SensorFunctions* GetSensorFunctions();
 
+class ServoUtils;
+extern ServoUtils* g_servo_utils;
+ServoUtils* GetServoUtils();
+
 Wt::WApplication* createApplication(const Wt::WEnvironment& env);
 
 int main(int argc, char** argv);

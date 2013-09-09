@@ -31,8 +31,10 @@ private:
 private:
 	PhidgetsAdvancedServo* m_phidget;
 	int m_index;
-//	Wt::WComboBox* m_servo_dropdown;
+	Wt::WComboBox* m_servo_type_dropdown;
   Wt::WSlider* m_position_slider;
+  Wt::WSlider* m_velocity_slider;
+  Wt::WLineEdit* m_current_value_edit; //As in, electrical current
 #if 0
   Wt::WLineEdit* m_converted_value_edit;
 	int m_default_ratiometric_index;

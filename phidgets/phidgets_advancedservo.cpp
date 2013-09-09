@@ -7,7 +7,6 @@
 
 #include "phidgets_advancedservo.h"
 
-//#include <stdio.h>
 #include "../app_manager.h"
 #include "../global.h"
 #include "../phidget_manager.h"
@@ -60,10 +59,9 @@ bool PhidgetsAdvancedServo::Init()
 	return (EPHIDGET_OK == CPhidgetAdvancedServo_create(&m_advancedservo_handle) &&
 	    EPHIDGET_OK == CPhidget_set_OnAttach_Handler(GetHandle(), ::OnPhidgetAttachAdvancedServo, this) &&
 	    EPHIDGET_OK == CPhidget_set_OnDetach_Handler(GetHandle(), ::OnPhidgetDetachAdvancedServo, this) &&
-#if 0
-	    EPHIDGET_OK == CPhidgetInterfaceKit_set_OnInputChange_Handler(m_interfacekit_handle, ::OnPhidgetInputChangeHandler, this) &&
-	    EPHIDGET_OK == CPhidgetInterfaceKit_set_OnSensorChange_Handler(m_interfacekit_handle, ::OnPhidgetSensorChangeHandler, this) &&
-#endif
+	    EPHIDGET_OK == CPhidgetAdvancedServo_set_OnVelocityChange_Handler(m_advancedservo_handle, ::OnVelocityChangeHandler, this) &&
+	    EPHIDGET_OK == CPhidgetAdvancedServo_set_OnPositionChange_Handler(m_advancedservo_handle, ::OnPositionChangeHandler, this) &&
+	    EPHIDGET_OK == CPhidgetAdvancedServo_set_OnCurrentChange_Handler(m_advancedservo_handle, ::OnCurrentChangeHandler, this) &&
 	    EPHIDGET_OK == CPhidget_open(GetHandle(), GetSerial()));
 }
 

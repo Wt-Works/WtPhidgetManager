@@ -6,13 +6,13 @@
  */
 
 #include "widgets_advancedservo.h"
+#include <Wt/WComboBox>
 #include <Wt/WHBoxLayout>
+#include <Wt/WLineEdit>
 #include <Wt/WSlider>
 #if 0
 #include <Wt/WCheckBox>
-#include <Wt/WComboBox>
 #include <Wt/WGroupBox>
-#include <Wt/WLineEdit>
 #include <Wt/WServer>
 #include <Wt/WTable>
 #include <Wt/WTableCell>
@@ -21,12 +21,11 @@
 #endif
 #include "../app.h"
 #include "../app_manager.h"
+#include "../global.h"
 #include "../phidgets/phidgets_advancedservo.h"
 #include "../phidget_manager.h"
-#if 0
-#include "../utils/sensor_functions.h"
-#include "../utils/string.h"
-#endif
+#include "../utils/servo.h"
+
 
 ServoWidget::ServoWidget(PhidgetsAdvancedServo* phidget, int index)
 : m_phidget(phidget),
@@ -43,19 +42,21 @@ Wt::WContainerWidget* ServoWidget::CreateWidget()
 	Wt::WContainerWidget* servo_container = new Wt::WContainerWidget();
   Wt::WHBoxLayout* hbox = new Wt::WHBoxLayout(servo_container);
 
+	m_servo_type_dropdown = new Wt::WComboBox();
+	::GetServoUtils()->PopulateTypeDropdown(m_servo_type_dropdown);
+//	m_servo_type_dropdown->activated().connect(boost::bind(&ServoWidget::OnWtTypeChanged, this));
+	hbox->addWidget(m_servo_type_dropdown);
+	
   m_position_slider = new Wt::WSlider();
 	hbox->addWidget(m_position_slider);
-#if 0
 
-	m_function_dropdown = new Wt::WComboBox();
-	::GetSensorFunctions()->PopulateDropdown(m_function_dropdown, m_ratiometric);
-	m_function_dropdown->activated().connect(boost::bind(&SensorWidget::OnWtFunctionChanged, this));
-	hbox->addWidget(m_function_dropdown);
+  m_velocity_slider = new Wt::WSlider();
+	hbox->addWidget(m_velocity_slider);
 
-  m_converted_value_edit = new Wt::WLineEdit();
-	m_converted_value_edit->setEnabled(false);
-	hbox->addWidget(m_converted_value_edit);
-#endif
+	m_current_value_edit = new Wt::WLineEdit();
+	m_current_value_edit->setEnabled(false);
+	hbox->addWidget(m_current_value_edit);
+
 	return servo_container;
 }
 
