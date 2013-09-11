@@ -77,6 +77,18 @@ CPhidget_ServoType ServoUtils::GetServoType(int index) const
 	return m_servo_types[index]->GetServoType();
 }
 
+int ServoUtils::GetServoTypeIndex(CPhidget_ServoType type) const
+{
+	int i;
+	for (i=0; m_servo_type_count>i; i++)
+	{
+		if (m_servo_types[i]->GetServoType() == type)
+			return i;
+	}
+	//If not found, use DEFAULT (and if that is not found, return 0...)
+	return (PHIDGET_SERVO_DEFAULT!=type ? GetServoTypeIndex(PHIDGET_SERVO_DEFAULT) : 0);
+}
+
 void ServoUtils::PopulateTypeDropdown(Wt::WComboBox* dropdown)
 {
 	dropdown->clear();

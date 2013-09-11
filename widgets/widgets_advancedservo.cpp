@@ -52,7 +52,7 @@ Wt::WContainerWidget* ServoWidget::CreateWidget()
   m_position_slider = new Wt::WSlider();
 	hbox->addWidget(m_position_slider);
 
-  m_velocity_slider = new Wt::WSlider();
+	m_velocity_slider = new Wt::WSlider();
 	hbox->addWidget(m_velocity_slider);
 
 	m_current_value_edit = new Wt::WLineEdit();
@@ -62,14 +62,15 @@ Wt::WContainerWidget* ServoWidget::CreateWidget()
 	return servo_container;
 }
 
-void ServoWidget::SetType(CPhidget_ServoType UNUSED(type))
+void ServoWidget::SetType(CPhidget_ServoType type)
 {
-	//ToDo
+	m_servo_type_dropdown->setCurrentIndex(::GetServoUtils()->GetServoTypeIndex(type));
+	UpdateControlValues();
 }
 
-void ServoWidget::SetVelocity(double UNUSED(velocity))
+void ServoWidget::SetVelocity(double velocity)
 {
-	//ToDo
+	m_velocity_slider->setValue(velocity);
 }
 
 void ServoWidget::SetPosition(double position)
@@ -77,31 +78,10 @@ void ServoWidget::SetPosition(double position)
 	m_position_slider->setValue(position);
 }
 
-void ServoWidget::SetCurrent(double UNUSED(current))
+void ServoWidget::SetCurrent(double current)
 {
-	//ToDo
+	m_current_value_edit->setText(Wt::WString::tr("GeneralArg").arg(current));
 }
-
-#if 0
-void SensorWidget::SetRatiometric(bool ratiometric)
-{
-	if (m_ratiometric)
-		m_default_ratiometric_index = m_function_dropdown->currentIndex();
-	else
-		m_default_non_ratiometric_index = m_function_dropdown->currentIndex();
-
-	m_ratiometric = ratiometric;
-	::GetSensorFunctions()->PopulateDropdown(m_function_dropdown, m_ratiometric);
-	m_function_dropdown->setCurrentIndex(m_ratiometric ? m_default_ratiometric_index : m_default_non_ratiometric_index);
-	OnWtFunctionChanged();
-}
-
-void SensorWidget::SetValue(int sensor_value)
-{
-	m_raw_value_edit->setText(Wt::WString::tr("GeneralArg").arg(sensor_value));
-	m_converted_value_edit->setText(::GetSensorFunctions()->ConvertSensorValue(m_function_dropdown->currentIndex(), sensor_value, m_ratiometric));
-}
-#endif
 
 void ServoWidget::OnWtTypeChanged()
 {
@@ -114,6 +94,15 @@ void ServoWidget::OnWtTypeChanged()
 
 void ServoWidget::UpdateControlValues()
 {
+	CPhidgetAdvancedServoHandle phidget = m_phidget->GetNativeHandle();
+	double min, max, velocity;
+	if (EPHIDGET_OK == CPhidgetAdvancedServo_getVelocityMin(phidget, m_index, &min) &&
+	    EPHIDGET_OK == CPhidgetAdvancedServo_getVelocityMax(phidget, m_index, &max) &&
+	    EPHIDGET_OK == CPhidgetAdvancedServo_getVelocity(phidget, m_index, &velocity))
+	{
+		m_velocity_slider->setRange(min, max);
+		m_velocity_slider->setValue(velocity);
+	}
 }
 
 

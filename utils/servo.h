@@ -35,6 +35,7 @@ public:
 public:
 	Wt::WString GetServoTitle(int index) const;
 	CPhidget_ServoType GetServoType(int index) const;
+	int GetServoTypeIndex(CPhidget_ServoType type) const;
 
 public:
 	void PopulateTypeDropdown(Wt::WComboBox* dropdown);
