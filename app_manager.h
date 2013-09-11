@@ -46,6 +46,7 @@ public: //Events from browser. Sync other applications
 	void OnWtOnboardLEDChanged(const PhidgetApplication* trigger_app, int serial, bool state);
 	void OnWtRatiometricChanged(const PhidgetApplication* trigger_app, int serial, bool state);
 	void OnWtRFIDAntennaChanged(const PhidgetApplication* trigger_app, int serial, bool state);
+	void OnWtServoTypeChanged(const PhidgetApplication* trigger_app, int serial, int index, CPhidget_ServoType type);
 	void OnWtTagWritten(const PhidgetApplication* trigger_app, int serial, const char* new_tag, CPhidgetRFID_Protocol protocol);
 
 private:

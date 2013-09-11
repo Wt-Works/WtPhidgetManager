@@ -15,21 +15,26 @@ class PhidgetsAdvancedServo;
 class ServoWidget
 {
 public:
-	ServoWidget(PhidgetsAdvancedServo* phidget, int index);
+	ServoWidget(PhidgetsAdvancedServo* phidget, PhidgetApplication* application, int serial, int index);
 	~ServoWidget();
 
 	Wt::WContainerWidget* CreateWidget();
+	void SetType(CPhidget_ServoType type);
 	void SetVelocity(double velocity);
 	void SetPosition(double position);
 	void SetCurrent(double current);
 
 private:
-#if 0
 	/* In Wt thread */
-	void OnWtFunctionChanged();
-#endif
+	void OnWtTypeChanged();
+
+private:
+	void UpdateControlValues();
+
 private:
 	PhidgetsAdvancedServo* m_phidget;
+	PhidgetApplication* m_application;
+	int m_serial;
 	int m_index;
 	Wt::WComboBox* m_servo_type_dropdown;
   Wt::WSlider* m_position_slider;
@@ -53,6 +58,7 @@ public: //From WidgetsCommon
 	virtual void OnServoVelocityChanged(int index, double velocity);
 	virtual void OnServoPositionChanged(int index, double position);
 	virtual void OnServoCurrentChanged(int index, double current);
+	virtual void OnServoTypeChanged(int index, CPhidget_ServoType type);
 
 protected:
 	virtual Wt::WContainerWidget* CreateWidget();

@@ -152,6 +152,11 @@ void ApplicationManager::OnWtRFIDAntennaChanged(const PhidgetApplication* trigge
 	SYNC_APP1(OnRFIDAntennaChanged, state);
 }
 
+void ApplicationManager::OnWtServoTypeChanged(const PhidgetApplication* trigger_app, int serial, int index, CPhidget_ServoType type)
+{
+	SYNC_APP2(OnServoTypeChanged, index, type);
+}
+
 void ApplicationManager::OnWtTagWritten(const PhidgetApplication* trigger_app, int serial, const char* new_tag, CPhidgetRFID_Protocol protocol)
 {
 	SYNC_APP2(OnTagWritten, new_tag, protocol);

@@ -27,8 +27,10 @@
 #include "../utils/servo.h"
 
 
-ServoWidget::ServoWidget(PhidgetsAdvancedServo* phidget, int index)
+ServoWidget::ServoWidget(PhidgetsAdvancedServo* phidget, PhidgetApplication* application, int serial, int index)
 : m_phidget(phidget),
+  m_application(application),
+  m_serial(serial),
   m_index(index)
 {
 }
@@ -44,7 +46,7 @@ Wt::WContainerWidget* ServoWidget::CreateWidget()
 
 	m_servo_type_dropdown = new Wt::WComboBox();
 	::GetServoUtils()->PopulateTypeDropdown(m_servo_type_dropdown);
-//	m_servo_type_dropdown->activated().connect(boost::bind(&ServoWidget::OnWtTypeChanged, this));
+	m_servo_type_dropdown->activated().connect(boost::bind(&ServoWidget::OnWtTypeChanged, this));
 	hbox->addWidget(m_servo_type_dropdown);
 	
   m_position_slider = new Wt::WSlider();
@@ -60,8 +62,14 @@ Wt::WContainerWidget* ServoWidget::CreateWidget()
 	return servo_container;
 }
 
+void ServoWidget::SetType(CPhidget_ServoType UNUSED(type))
+{
+	//ToDo
+}
+
 void ServoWidget::SetVelocity(double UNUSED(velocity))
 {
+	//ToDo
 }
 
 void ServoWidget::SetPosition(double position)
@@ -71,6 +79,7 @@ void ServoWidget::SetPosition(double position)
 
 void ServoWidget::SetCurrent(double UNUSED(current))
 {
+	//ToDo
 }
 
 #if 0
@@ -92,16 +101,21 @@ void SensorWidget::SetValue(int sensor_value)
 	m_raw_value_edit->setText(Wt::WString::tr("GeneralArg").arg(sensor_value));
 	m_converted_value_edit->setText(::GetSensorFunctions()->ConvertSensorValue(m_function_dropdown->currentIndex(), sensor_value, m_ratiometric));
 }
-
-void SensorWidget::OnWtFunctionChanged()
-{
-	const Wt::WString& value = m_raw_value_edit->text();
-	if (value.empty())
-		return;
-
-	SetValue(StringUtil::ToInt(value));
-}
 #endif
+
+void ServoWidget::OnWtTypeChanged()
+{
+	CPhidget_ServoType type = ::GetServoUtils()->GetServoType(m_servo_type_dropdown->currentIndex());
+
+	UpdateControlValues();
+	
+	::GetApplicationManager()->OnWtServoTypeChanged(m_application, m_serial, m_index, type);
+}
+
+void ServoWidget::UpdateControlValues()
+{
+}
+
 
 
 WidgetsAdvancedServo::WidgetsAdvancedServo(PhidgetsAdvancedServo* phidget, PhidgetApplication* application)
@@ -150,6 +164,15 @@ void WidgetsAdvancedServo::OnServoCurrentChanged(int index, double current)
 	if (0<=index && m_servo_widget_array_length>index)
 	{
 		m_servo_widget_array[index]->SetCurrent(current);
+		GetApplication()->triggerUpdate();
+	}
+}
+
+void WidgetsAdvancedServo::OnServoTypeChanged(int index, CPhidget_ServoType type)
+{
+	if (0<=index && m_servo_widget_array_length>index)
+	{
+		m_servo_widget_array[index]->SetType(type);
 		GetApplication()->triggerUpdate();
 	}
 }

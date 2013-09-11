@@ -86,6 +86,8 @@ void SensorWidget::OnWtFunctionChanged()
 		return;
 
 	SetValue(StringUtil::ToInt(value));
+	
+	//Don't broadcast this to other clients
 }
 
 

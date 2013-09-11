@@ -202,6 +202,11 @@ void PhidgetApplication::OnServoCurrentChanged(int serial, int index, double cur
 	SYNC_WIDGET2(OnServoCurrentChanged, index, current);
 }
 
+void PhidgetApplication::OnServoTypeChanged(int serial, int index, CPhidget_ServoType type)
+{
+	SYNC_WIDGET2(OnServoTypeChanged, index, type);
+}
+
 void PhidgetApplication::OnTagWritten(int serial, const char* new_tag, CPhidgetRFID_Protocol protocol)
 {
 	SYNC_WIDGET2(OnTagWritten, new_tag, protocol);
