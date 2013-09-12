@@ -157,6 +157,11 @@ void ApplicationManager::OnWtRFIDAntennaChanged(const PhidgetApplication* trigge
 	SYNC_APP1(OnRFIDAntennaChanged, state);
 }
 
+void ApplicationManager::OnWtServoSpeedRampingChanged(const PhidgetApplication* trigger_app, int serial, int index, bool speed_ramping)
+{
+	SYNC_APP2(OnServoSpeedRampingChanged, index, speed_ramping);
+}
+
 void ApplicationManager::OnWtServoTypeChanged(const PhidgetApplication* trigger_app, int serial, int index, CPhidget_ServoType type)
 {
 	SYNC_APP2(OnServoTypeChanged, index, type);

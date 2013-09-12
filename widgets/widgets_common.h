@@ -37,6 +37,7 @@ public:
 	virtual void OnServoCurrentChanged(int UNUSED(index), double UNUSED(current)) {}
 	virtual void OnServoPositionChanged(int UNUSED(index), double UNUSED(position)) {}
 	virtual void OnServoVelocityChanged(int UNUSED(index), double UNUSED(velocity)) {}
+	virtual void OnServoSpeedRampingChanged(int UNUSED(index), bool UNUSED(speed_ramping)) {}
 	virtual void OnServoTypeChanged(int UNUSED(index), CPhidget_ServoType UNUSED(type)) {}
 	virtual void OnTagWritten(const char* UNUSED(new_tag), CPhidgetRFID_Protocol UNUSED(protocol)) {}
 

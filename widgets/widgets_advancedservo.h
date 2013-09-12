@@ -20,6 +20,7 @@ public:
 
 	Wt::WContainerWidget* CreateWidget();
 	void SetType(CPhidget_ServoType type);
+	void SetSpeedRamping(bool speed_ramping);
 	void SetAcceleration(double acceleration);
 	void SetCurrent(double current);
 	void SetPosition(double position);
@@ -27,6 +28,7 @@ public:
 
 private:
 	/* In Wt thread */
+	void OnWtSpeedRampingChanged(Wt::WCheckBox* checkbox);
 	void OnWtTypeChanged();
 
 private:
@@ -38,6 +40,7 @@ private:
 	int m_serial;
 	int m_index;
 	Wt::WComboBox* m_servo_type_dropdown;
+	Wt::WCheckBox* m_speed_ramping_checkbox;
   Wt::WSlider* m_acceleration_slider;
   Wt::WSlider* m_velocity_slider;
   Wt::WSlider* m_position_slider;
@@ -60,6 +63,7 @@ public: //From WidgetsCommon
 	virtual void OnServoAccelerationChanged(int index, double acceleration);
 	virtual void OnServoCurrentChanged(int index, double current);
 	virtual void OnServoPositionChanged(int index, double position);
+	virtual void OnServoSpeedRampingChanged(int index, bool speed_ramping);
 	virtual void OnServoTypeChanged(int index, CPhidget_ServoType type);
 	virtual void OnServoVelocityChanged(int index, double velocity);
 

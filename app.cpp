@@ -202,6 +202,11 @@ void PhidgetApplication::OnServoPositionChanged(int serial, int index, double po
 	SYNC_WIDGET2(OnServoPositionChanged, index, position);
 }
 
+void PhidgetApplication::OnServoSpeedRampingChanged(int serial, int index, bool speed_ramping)
+{
+	SYNC_WIDGET2(OnServoSpeedRampingChanged, index, speed_ramping);
+}
+
 void PhidgetApplication::OnServoTypeChanged(int serial, int index, CPhidget_ServoType type)
 {
 	SYNC_WIDGET2(OnServoTypeChanged, index, type);

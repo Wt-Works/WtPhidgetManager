@@ -6,12 +6,12 @@
  */
 
 #include "widgets_advancedservo.h"
+#include <Wt/WCheckBox>
 #include <Wt/WComboBox>
 #include <Wt/WHBoxLayout>
 #include <Wt/WLineEdit>
 #include <Wt/WSlider>
 #if 0
-#include <Wt/WCheckBox>
 #include <Wt/WGroupBox>
 #include <Wt/WServer>
 #include <Wt/WTable>
@@ -49,6 +49,10 @@ Wt::WContainerWidget* ServoWidget::CreateWidget()
 	m_servo_type_dropdown->activated().connect(boost::bind(&ServoWidget::OnWtTypeChanged, this));
 	hbox->addWidget(m_servo_type_dropdown);
 	
+	m_speed_ramping_checkbox = new Wt::WCheckBox();
+	hbox->addWidget(m_speed_ramping_checkbox);
+	m_speed_ramping_checkbox->changed().connect(boost::bind(&ServoWidget::OnWtSpeedRampingChanged, this, m_speed_ramping_checkbox));
+  
 	m_acceleration_slider = new Wt::WSlider();
 	hbox->addWidget(m_acceleration_slider);
 
@@ -62,13 +66,26 @@ Wt::WContainerWidget* ServoWidget::CreateWidget()
 	m_current_value_edit->setEnabled(false);
 	hbox->addWidget(m_current_value_edit);
 
-	return servo_container;
+	int speed_ramping;
+  if (EPHIDGET_OK == CPhidgetAdvancedServo_getSpeedRampingOn(m_phidget->GetNativeHandle(), m_index, &speed_ramping))
+  {
+    SetSpeedRamping(PTRUE == speed_ramping);
+  }
+
+ 	return servo_container;
 }
 
 void ServoWidget::SetType(CPhidget_ServoType type)
 {
 	m_servo_type_dropdown->setCurrentIndex(::GetServoUtils()->GetServoTypeIndex(type));
 	UpdateControlValues();
+}
+
+void ServoWidget::SetSpeedRamping(bool speed_ramping)
+{
+	m_speed_ramping_checkbox->setChecked(speed_ramping);
+	m_acceleration_slider->setHidden(!speed_ramping);
+	m_velocity_slider->setHidden(!speed_ramping);
 }
 
 void ServoWidget::SetAcceleration(double acceleration)
@@ -89,6 +106,15 @@ void ServoWidget::SetPosition(double position)
 void ServoWidget::SetVelocity(double velocity)
 {
 	m_velocity_slider->setValue(velocity);
+}
+
+void ServoWidget::OnWtSpeedRampingChanged(Wt::WCheckBox* checkbox)
+{
+	bool speed_ramping = checkbox->isChecked();
+
+	UpdateControlValues();
+	
+	::GetApplicationManager()->OnWtServoSpeedRampingChanged(m_application, m_serial, m_index, speed_ramping);
 }
 
 void ServoWidget::OnWtTypeChanged()
@@ -189,6 +215,15 @@ void WidgetsAdvancedServo::OnServoCurrentChanged(int index, double current)
 	if (0<=index && m_servo_widget_array_length>index)
 	{
 		m_servo_widget_array[index]->SetCurrent(current);
+		GetApplication()->triggerUpdate();
+	}
+}
+
+void WidgetsAdvancedServo::OnServoSpeedRampingChanged(int index, bool speed_ramping)
+{
+	if (0<=index && m_servo_widget_array_length>index)
+	{
+		m_servo_widget_array[index]->SetSpeedRamping(speed_ramping);
 		GetApplication()->triggerUpdate();
 	}
 }
