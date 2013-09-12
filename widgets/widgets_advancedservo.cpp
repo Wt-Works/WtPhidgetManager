@@ -49,11 +49,14 @@ Wt::WContainerWidget* ServoWidget::CreateWidget()
 	m_servo_type_dropdown->activated().connect(boost::bind(&ServoWidget::OnWtTypeChanged, this));
 	hbox->addWidget(m_servo_type_dropdown);
 	
-  m_position_slider = new Wt::WSlider();
-	hbox->addWidget(m_position_slider);
+	m_acceleration_slider = new Wt::WSlider();
+	hbox->addWidget(m_acceleration_slider);
 
 	m_velocity_slider = new Wt::WSlider();
 	hbox->addWidget(m_velocity_slider);
+
+  m_position_slider = new Wt::WSlider();
+	hbox->addWidget(m_position_slider);
 
 	m_current_value_edit = new Wt::WLineEdit();
 	m_current_value_edit->setEnabled(false);
@@ -68,9 +71,14 @@ void ServoWidget::SetType(CPhidget_ServoType type)
 	UpdateControlValues();
 }
 
-void ServoWidget::SetVelocity(double velocity)
+void ServoWidget::SetAcceleration(double acceleration)
 {
-	m_velocity_slider->setValue(velocity);
+	m_acceleration_slider->setValue(acceleration);
+}
+
+void ServoWidget::SetCurrent(double current)
+{
+	m_current_value_edit->setText(Wt::WString::tr("GeneralArg").arg(current));
 }
 
 void ServoWidget::SetPosition(double position)
@@ -78,9 +86,9 @@ void ServoWidget::SetPosition(double position)
 	m_position_slider->setValue(position);
 }
 
-void ServoWidget::SetCurrent(double current)
+void ServoWidget::SetVelocity(double velocity)
 {
-	m_current_value_edit->setText(Wt::WString::tr("GeneralArg").arg(current));
+	m_velocity_slider->setValue(velocity);
 }
 
 void ServoWidget::OnWtTypeChanged()
@@ -95,13 +103,32 @@ void ServoWidget::OnWtTypeChanged()
 void ServoWidget::UpdateControlValues()
 {
 	CPhidgetAdvancedServoHandle phidget = m_phidget->GetNativeHandle();
-	double min, max, velocity;
+
+	double min, max, acceleration;
+	if (EPHIDGET_OK == CPhidgetAdvancedServo_getAccelerationMin(phidget, m_index, &min) &&
+	    EPHIDGET_OK == CPhidgetAdvancedServo_getAccelerationMax(phidget, m_index, &max) &&
+	    EPHIDGET_OK == CPhidgetAdvancedServo_getAcceleration(phidget, m_index, &acceleration))
+	{
+		m_acceleration_slider->setRange(min, max);
+		m_acceleration_slider->setValue(acceleration);
+	}
+
+	double velocity;
 	if (EPHIDGET_OK == CPhidgetAdvancedServo_getVelocityMin(phidget, m_index, &min) &&
 	    EPHIDGET_OK == CPhidgetAdvancedServo_getVelocityMax(phidget, m_index, &max) &&
 	    EPHIDGET_OK == CPhidgetAdvancedServo_getVelocity(phidget, m_index, &velocity))
 	{
 		m_velocity_slider->setRange(min, max);
 		m_velocity_slider->setValue(velocity);
+	}
+
+	double position;
+	if (EPHIDGET_OK == CPhidgetAdvancedServo_getPositionMin(phidget, m_index, &min) &&
+	    EPHIDGET_OK == CPhidgetAdvancedServo_getPositionMax(phidget, m_index, &max) &&
+	    EPHIDGET_OK == CPhidgetAdvancedServo_getPosition(phidget, m_index, &position))
+	{
+		m_position_slider->setRange(min, max);
+		m_position_slider->setValue(position);
 	}
 }
 
@@ -128,6 +155,15 @@ WidgetsAdvancedServo::~WidgetsAdvancedServo()
 int WidgetsAdvancedServo::GetSerial()
 {
 	return m_phidget->GetSerial();
+}
+
+void WidgetsAdvancedServo::OnServoAccelerationChanged(int index, double acceleration)
+{
+	if (0<=index && m_servo_widget_array_length>index)
+	{
+		m_servo_widget_array[index]->SetAcceleration(acceleration);
+		GetApplication()->triggerUpdate();
+	}
 }
 
 void WidgetsAdvancedServo::OnServoVelocityChanged(int index, double velocity)

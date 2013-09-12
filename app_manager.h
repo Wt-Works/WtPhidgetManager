@@ -37,6 +37,7 @@ public: //Events from physical Phidgets
   void OnPhidgetGotRFIDTag(int serial, const char* tag, CPhidgetRFID_Protocol protocol);
   void OnPhidgetLostRFIDTag(int serial);
   void OnPhidgetSensorChanged(int serial, int index, int sensor_value);
+	void OnPhidgetServoAccelerationChanged(int serial, int index, double acceleration);
 	void OnPhidgetServoVelocityChanged(int serial, int index, double velocity);
 	void OnPhidgetServoPositionChanged(int serial, int index, double position);
 	void OnPhidgetServoCurrentChanged(int serial, int index, double current);

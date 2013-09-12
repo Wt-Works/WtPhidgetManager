@@ -33,9 +33,10 @@ public:
 	virtual void OnRFIDAntennaChanged(bool UNUSED(state)) {}
 	virtual void OnRatiometricChanged(bool UNUSED(state)) {}
   virtual void OnSensorChanged(int UNUSED(index), int UNUSED(sensor_value)) {}
-	virtual void OnServoVelocityChanged(int UNUSED(index), double UNUSED(velocity)) {}
-	virtual void OnServoPositionChanged(int UNUSED(index), double UNUSED(position)) {}
+	virtual void OnServoAccelerationChanged(int UNUSED(index), double UNUSED(acceleration)) {}
 	virtual void OnServoCurrentChanged(int UNUSED(index), double UNUSED(current)) {}
+	virtual void OnServoPositionChanged(int UNUSED(index), double UNUSED(position)) {}
+	virtual void OnServoVelocityChanged(int UNUSED(index), double UNUSED(velocity)) {}
 	virtual void OnServoTypeChanged(int UNUSED(index), CPhidget_ServoType UNUSED(type)) {}
 	virtual void OnTagWritten(const char* UNUSED(new_tag), CPhidgetRFID_Protocol UNUSED(protocol)) {}
 

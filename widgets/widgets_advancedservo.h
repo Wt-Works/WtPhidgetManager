@@ -20,9 +20,10 @@ public:
 
 	Wt::WContainerWidget* CreateWidget();
 	void SetType(CPhidget_ServoType type);
-	void SetVelocity(double velocity);
-	void SetPosition(double position);
+	void SetAcceleration(double acceleration);
 	void SetCurrent(double current);
+	void SetPosition(double position);
+	void SetVelocity(double velocity);
 
 private:
 	/* In Wt thread */
@@ -37,8 +38,9 @@ private:
 	int m_serial;
 	int m_index;
 	Wt::WComboBox* m_servo_type_dropdown;
-  Wt::WSlider* m_position_slider;
+  Wt::WSlider* m_acceleration_slider;
   Wt::WSlider* m_velocity_slider;
+  Wt::WSlider* m_position_slider;
   Wt::WLineEdit* m_current_value_edit; //As in, electrical current
 #if 0
   Wt::WLineEdit* m_converted_value_edit;
@@ -55,10 +57,11 @@ public:
 
 public: //From WidgetsCommon
 	virtual int GetSerial();
-	virtual void OnServoVelocityChanged(int index, double velocity);
-	virtual void OnServoPositionChanged(int index, double position);
+	virtual void OnServoAccelerationChanged(int index, double acceleration);
 	virtual void OnServoCurrentChanged(int index, double current);
+	virtual void OnServoPositionChanged(int index, double position);
 	virtual void OnServoTypeChanged(int index, CPhidget_ServoType type);
+	virtual void OnServoVelocityChanged(int index, double velocity);
 
 protected:
 	virtual Wt::WContainerWidget* CreateWidget();
