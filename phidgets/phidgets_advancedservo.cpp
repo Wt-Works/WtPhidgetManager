@@ -122,6 +122,14 @@ int PhidgetsAdvancedServo::OnPositionChangeHandler(CPhidgetAdvancedServoHandle h
 		return EPHIDGET_UNEXPECTED;
 
 	::GetApplicationManager()->OnPhidgetServoPositionChanged(GetSerial(), index, position);
+
+	//Disengage servo if error or it is not moving anymore
+	int stopped;
+	if (EPHIDGET_OK != CPhidgetAdvancedServo_getStopped(handle, index, &stopped) || PTRUE==stopped)
+	{
+		CPhidgetAdvancedServo_setEngaged(handle, index, PTRUE);
+	}
+
 	return EPHIDGET_OK;
 }
 

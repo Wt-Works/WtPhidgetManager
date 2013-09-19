@@ -25,9 +25,13 @@ public:
 	void SetCurrent(double current);
 	void SetPosition(double position);
 	void SetVelocity(double velocity);
+	void SetVelocityLimit(double velocity_limit);
 
 private:
 	/* In Wt thread */
+	void OnWtAccelerationChanged(Wt::WSlider* slider);
+	void OnWtPositionChanged(Wt::WSlider* slider);
+	void OnWtVelocityLimitChanged(Wt::WSlider* slider);
 	void OnWtSpeedRampingChanged(Wt::WCheckBox* checkbox);
 	void OnWtTypeChanged();
 
@@ -42,7 +46,7 @@ private:
 	Wt::WComboBox* m_servo_type_dropdown;
 	Wt::WCheckBox* m_speed_ramping_checkbox;
   Wt::WSlider* m_acceleration_slider;
-  Wt::WSlider* m_velocity_slider;
+  Wt::WSlider* m_velocity_limit_slider;
   Wt::WSlider* m_position_slider;
   Wt::WLineEdit* m_current_value_edit; //As in, electrical current
 #if 0
@@ -66,6 +70,7 @@ public: //From WidgetsCommon
 	virtual void OnServoSpeedRampingChanged(int index, bool speed_ramping);
 	virtual void OnServoTypeChanged(int index, CPhidget_ServoType type);
 	virtual void OnServoVelocityChanged(int index, double velocity);
+	virtual void OnServoVelocityLimitChanged(int index, double velocity_limit);
 
 protected:
 	virtual Wt::WContainerWidget* CreateWidget();

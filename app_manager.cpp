@@ -157,6 +157,11 @@ void ApplicationManager::OnWtRFIDAntennaChanged(const PhidgetApplication* trigge
 	SYNC_APP1(OnRFIDAntennaChanged, state);
 }
 
+void ApplicationManager::OnWtServoAccelerationChanged(const PhidgetApplication* trigger_app, int serial, int index, double acceleration)
+{
+	SYNC_APP2(OnServoAccelerationChanged, index, acceleration);
+}
+
 void ApplicationManager::OnWtServoSpeedRampingChanged(const PhidgetApplication* trigger_app, int serial, int index, bool speed_ramping)
 {
 	SYNC_APP2(OnServoSpeedRampingChanged, index, speed_ramping);
@@ -165,6 +170,11 @@ void ApplicationManager::OnWtServoSpeedRampingChanged(const PhidgetApplication* 
 void ApplicationManager::OnWtServoTypeChanged(const PhidgetApplication* trigger_app, int serial, int index, CPhidget_ServoType type)
 {
 	SYNC_APP2(OnServoTypeChanged, index, type);
+}
+
+void ApplicationManager::OnWtServoVelocityLimitChanged(const PhidgetApplication* trigger_app, int serial, int index, double velocity_limit)
+{
+	SYNC_APP2(OnServoVelocityLimitChanged, index, velocity_limit);
 }
 
 void ApplicationManager::OnWtTagWritten(const PhidgetApplication* trigger_app, int serial, const char* new_tag, CPhidgetRFID_Protocol protocol)

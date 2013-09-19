@@ -49,6 +49,7 @@ public:
   void OnServoSpeedRampingChanged(int serial, int index, bool speed_ramping);
   void OnServoTypeChanged(int serial, int index, CPhidget_ServoType type);
 	void OnServoVelocityChanged(int serial, int index, double velocity);
+	void OnServoVelocityLimitChanged(int serial, int index, double velocity_limit);
 	void OnTagWritten(int serial, const char* new_tag, CPhidgetRFID_Protocol protocol);
 
 private:

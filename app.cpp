@@ -217,6 +217,11 @@ void PhidgetApplication::OnServoVelocityChanged(int serial, int index, double ve
 	SYNC_WIDGET2(OnServoVelocityChanged, index, velocity);
 }
 
+void PhidgetApplication::OnServoVelocityLimitChanged(int serial, int index, double velocity_limit)
+{
+	SYNC_WIDGET2(OnServoVelocityLimitChanged, index, velocity_limit);
+}
+
 void PhidgetApplication::OnTagWritten(int serial, const char* new_tag, CPhidgetRFID_Protocol protocol)
 {
 	SYNC_WIDGET2(OnTagWritten, new_tag, protocol);

@@ -55,12 +55,15 @@ Wt::WContainerWidget* ServoWidget::CreateWidget()
   
 	m_acceleration_slider = new Wt::WSlider();
 	hbox->addWidget(m_acceleration_slider);
+	m_acceleration_slider->valueChanged().connect(boost::bind(&ServoWidget::OnWtAccelerationChanged, this, m_acceleration_slider));
 
-	m_velocity_slider = new Wt::WSlider();
-	hbox->addWidget(m_velocity_slider);
+	m_velocity_limit_slider = new Wt::WSlider();
+	hbox->addWidget(m_velocity_limit_slider);
+	m_velocity_limit_slider->valueChanged().connect(boost::bind(&ServoWidget::OnWtVelocityLimitChanged, this, m_velocity_limit_slider));
 
   m_position_slider = new Wt::WSlider();
 	hbox->addWidget(m_position_slider);
+	m_position_slider->valueChanged().connect(boost::bind(&ServoWidget::OnWtPositionChanged, this, m_position_slider));
 
 	m_current_value_edit = new Wt::WLineEdit();
 	m_current_value_edit->setEnabled(false);
@@ -85,7 +88,7 @@ void ServoWidget::SetSpeedRamping(bool speed_ramping)
 {
 	m_speed_ramping_checkbox->setChecked(speed_ramping);
 	m_acceleration_slider->setHidden(!speed_ramping);
-	m_velocity_slider->setHidden(!speed_ramping);
+	m_velocity_limit_slider->setHidden(!speed_ramping);
 }
 
 void ServoWidget::SetAcceleration(double acceleration)
@@ -103,14 +106,56 @@ void ServoWidget::SetPosition(double position)
 	m_position_slider->setValue(position);
 }
 
-void ServoWidget::SetVelocity(double velocity)
+void ServoWidget::SetVelocity(double UNUSED(velocity))
 {
-	m_velocity_slider->setValue(velocity);
+	//m_velocity_edit->setValue(velocity);
+}
+
+void ServoWidget::SetVelocityLimit(double velocity_limit)
+{
+	m_velocity_limit_slider->setValue(velocity_limit);
+}
+
+void ServoWidget::OnWtAccelerationChanged(Wt::WSlider* slider)
+{
+	double acceleration = slider->value();
+
+	CPhidgetAdvancedServo_setAcceleration(m_phidget->GetNativeHandle(), m_index, acceleration);	 
+
+	::GetApplicationManager()->OnWtServoAccelerationChanged(m_application, m_serial, m_index, acceleration);
+}
+
+void ServoWidget::OnWtPositionChanged(Wt::WSlider* slider)
+{
+	double position;
+	double new_position = slider->value();
+	if (EPHIDGET_OK != CPhidgetAdvancedServo_getPosition(m_phidget->GetNativeHandle(), m_index, &position) ||
+	    position == new_position)
+	{
+		return; //Fail, or already at position. Do nothing
+	}
+
+	CPhidgetAdvancedServo_setPosition(m_phidget->GetNativeHandle(), m_index, new_position);
+	CPhidgetAdvancedServo_setEngaged(m_phidget->GetNativeHandle(), m_index, PTRUE);
+
+	//Don't sync position, it will be synced automatically as the servo turns
+	//::GetApplicationManager()->OnWtServoPositionChanged(m_application, m_serial, m_index, new_position);
+}
+
+void ServoWidget::OnWtVelocityLimitChanged(Wt::WSlider* slider)
+{
+	double velocity_limit = slider->value();
+
+	CPhidgetAdvancedServo_setVelocityLimit(m_phidget->GetNativeHandle(), m_index, velocity_limit);
+
+	::GetApplicationManager()->OnWtServoVelocityLimitChanged(m_application, m_serial, m_index, velocity_limit);
 }
 
 void ServoWidget::OnWtSpeedRampingChanged(Wt::WCheckBox* checkbox)
 {
 	bool speed_ramping = checkbox->isChecked();
+
+	CPhidgetAdvancedServo_setSpeedRampingOn(m_phidget->GetNativeHandle(), m_index, speed_ramping ? PTRUE : PFALSE);
 
 	UpdateControlValues();
 	
@@ -139,13 +184,13 @@ void ServoWidget::UpdateControlValues()
 		m_acceleration_slider->setValue(acceleration);
 	}
 
-	double velocity;
+	double velocity_limit;
 	if (EPHIDGET_OK == CPhidgetAdvancedServo_getVelocityMin(phidget, m_index, &min) &&
 	    EPHIDGET_OK == CPhidgetAdvancedServo_getVelocityMax(phidget, m_index, &max) &&
-	    EPHIDGET_OK == CPhidgetAdvancedServo_getVelocity(phidget, m_index, &velocity))
+	    EPHIDGET_OK == CPhidgetAdvancedServo_getVelocityLimit(phidget, m_index, &velocity_limit))
 	{
-		m_velocity_slider->setRange(min, max);
-		m_velocity_slider->setValue(velocity);
+		m_velocity_limit_slider->setRange(min, max);
+		m_velocity_limit_slider->setValue(velocity_limit);
 	}
 
 	double position;
@@ -197,6 +242,15 @@ void WidgetsAdvancedServo::OnServoVelocityChanged(int index, double velocity)
 	if (0<=index && m_servo_widget_array_length>index)
 	{
 		m_servo_widget_array[index]->SetVelocity(velocity);
+		GetApplication()->triggerUpdate();
+	}
+}
+
+void WidgetsAdvancedServo::OnServoVelocityLimitChanged(int index, double velocity_limit)
+{
+	if (0<=index && m_servo_widget_array_length>index)
+	{
+		m_servo_widget_array[index]->SetVelocityLimit(velocity_limit);
 		GetApplication()->triggerUpdate();
 	}
 }
