@@ -46,14 +46,10 @@ private:
 	Wt::WComboBox* m_servo_type_dropdown;
 	Wt::WCheckBox* m_speed_ramping_checkbox;
   Wt::WSlider* m_acceleration_slider;
+  Wt::WLineEdit* m_velocity_value_edit;
   Wt::WSlider* m_velocity_limit_slider;
   Wt::WSlider* m_position_slider;
   Wt::WLineEdit* m_current_value_edit; //As in, electrical current
-#if 0
-  Wt::WLineEdit* m_converted_value_edit;
-	int m_default_ratiometric_index;
-	int m_default_non_ratiometric_index;
-#endif
 };
 
 class WidgetsAdvancedServo : public WidgetsCommon

@@ -25,6 +25,7 @@
 #include "../phidgets/phidgets_advancedservo.h"
 #include "../phidget_manager.h"
 #include "../utils/servo.h"
+#include "../utils/string.h"
 
 
 ServoWidget::ServoWidget(PhidgetsAdvancedServo* phidget, PhidgetApplication* application, int serial, int index)
@@ -56,6 +57,10 @@ Wt::WContainerWidget* ServoWidget::CreateWidget()
 	m_acceleration_slider = new Wt::WSlider();
 	hbox->addWidget(m_acceleration_slider);
 	m_acceleration_slider->valueChanged().connect(boost::bind(&ServoWidget::OnWtAccelerationChanged, this, m_acceleration_slider));
+
+	m_velocity_value_edit = new Wt::WLineEdit();
+	m_velocity_value_edit->setEnabled(false);
+	hbox->addWidget(m_velocity_value_edit);
 
 	m_velocity_limit_slider = new Wt::WSlider();
 	hbox->addWidget(m_velocity_limit_slider);
@@ -98,7 +103,7 @@ void ServoWidget::SetAcceleration(double acceleration)
 
 void ServoWidget::SetCurrent(double current)
 {
-	m_current_value_edit->setText(Wt::WString::tr("GeneralArg").arg(current));
+	m_current_value_edit->setText(Wt::WString::tr("FunctionVFormat").arg(StringUtil::Round(current)));
 }
 
 void ServoWidget::SetPosition(double position)
@@ -106,9 +111,9 @@ void ServoWidget::SetPosition(double position)
 	m_position_slider->setValue(position);
 }
 
-void ServoWidget::SetVelocity(double UNUSED(velocity))
+void ServoWidget::SetVelocity(double velocity)
 {
-	//m_velocity_edit->setValue(velocity);
+	m_velocity_value_edit->setText(Wt::WString::tr("FunctionDSFormat").arg(StringUtil::Round(velocity)));
 }
 
 void ServoWidget::SetVelocityLimit(double velocity_limit)

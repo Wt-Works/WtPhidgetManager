@@ -80,6 +80,7 @@
   <message id="FunctionCMFormat">{1} C</message>
   <message id="FunctionCMFormat">{1} cm</message>
   <message id="FunctionDBFormat">{1} dB</message>
+	<message id="FunctionDSFormat">{1} °/s</message>
   <message id="FunctionDefaultFormat">{1}</message>
   <message id="FunctionGFormat">{1} g</message>
   <message id="FunctionGaussFormat">{1} Φ</message>
