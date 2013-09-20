@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <messages>
+	<message id="Acceleration">Acceleration</message>
   <message id="Antenna On">Antenna On</message>
+	<message id="Current">Current</message>
   <message id="DeviceLabel">DeviceLabel</message>
 	<message id="DeviceName">DeviceName</message>
   <message id="DeviceStatus">DeviceStatus</message>
@@ -98,6 +100,7 @@
   <message id="FunctionWFormat">{1} W</message>
   <message id="General Info">General Info</message>
 	<message id="GeneralArg">{1}</message>
+	<message id="Info">Info</message>
 	<message id="Input">Input</message>
   <message id="LibraryVersion">LibraryVersion</message>
 	<message id="Lock Tag">Lock Tag</message>
@@ -108,13 +111,16 @@
 	<message id="Output">Output</message>
 	<message id="OnboardLED">Onboard LED</message>
 	<message id="Phidget (Common)">(Common)</message>
+	<message id="PhidgetAdvancedServo">PhidgetAdvancedServo</message>
 	<message id="PhidgetInterfaceKit">PhidgetInterfaceKit</message>
 	<message id="PhidgetRFID">PhidgetRFID</message>
 	<message id="PHIDGET_RFID_PROTOCOL_EM4100">EM4100 (EM4102) 40-bit</message>
 	<message id="PHIDGET_RFID_PROTOCOL_ISO11785_FDX_B">ISO11785 FDX-B encoding (Animal ID)</message>
 	<message id="PHIDGET_RFID_PROTOCOL_PHIDGETS">"PhidgetTAG Protocol 24 character ASCII</message>
+	<message id="Position">Position</message>
   <message id="Ratiometric">Ratiometric</message>
 	<message id="SensorArgs">Sensor {1}</message>
+	<message id="ServoArgs">Servo {1}</message>
 	<message id="PHIDGET_SERVO_DEFAULT">DEFAULT</message>
 	<message id="PHIDGET_SERVO_RAW_us_MODE">RAW us MODE</message>
 	<message id="PHIDGET_SERVO_HITEC_HS322HD">HITEC HS322HD</message>
@@ -140,10 +146,14 @@
 	<message id="PHIDGET_SERVO_SPRINGRC_SM_S4315R">SPRINGRC SM S4315R</message>
 	<message id="PHIDGET_SERVO_SPRINGRC_SM_S4505B">SPRINGRC SM S4505B</message>
   <message id="SerialNumber">SerialNumber</message>
+	<message id="Speed ramping">Speed ramping</message>
 	<message id="Tag">Tag</message>
 	<message id="Touched">Touched</message>
 	<message id="Turn antenna On to read tags">Turn antenna On to read tags</message>
+	<message id="Type">Type</message>
 	<message id="Untouched">Untouched</message>
+	<message id="Velocity">Velocity</message>
+	<message id="Velocity limit">Velocity limit</message>
 	<message id="Write Tag">Write Tag</message>
 	<message id="Writing tag failed: ">Writing tag failed: {1}</message>
 </messages>

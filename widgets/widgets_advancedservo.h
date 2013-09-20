@@ -10,12 +10,11 @@
 
 #include "widgets_common.h"
 
-class PhidgetsAdvancedServo;
-
+class WidgetsAdvancedServo;
 class ServoWidget
 {
 public:
-	ServoWidget(PhidgetsAdvancedServo* phidget, PhidgetApplication* application, int serial, int index);
+	ServoWidget(WidgetsAdvancedServo* widget, const Wt::WLength& left_column_width, PhidgetApplication* application, int serial, int index);
 	~ServoWidget();
 
 	Wt::WContainerWidget* CreateWidget();
@@ -39,7 +38,8 @@ private:
 	void UpdateControlValues();
 
 private:
-	PhidgetsAdvancedServo* m_phidget;
+	WidgetsAdvancedServo* m_widget;
+	Wt::WLength m_left_column_width;
 	PhidgetApplication* m_application;
 	int m_serial;
 	int m_index;
@@ -52,6 +52,7 @@ private:
   Wt::WLineEdit* m_current_value_edit; //As in, electrical current
 };
 
+class PhidgetsAdvancedServo;
 class WidgetsAdvancedServo : public WidgetsCommon
 {
 public:
@@ -68,13 +69,14 @@ public: //From WidgetsCommon
 	virtual void OnServoVelocityChanged(int index, double velocity);
 	virtual void OnServoVelocityLimitChanged(int index, double velocity_limit);
 
+public:
+	PhidgetsAdvancedServo* GetPhidget() const {return m_phidget;}
+	
 protected:
 	virtual Wt::WContainerWidget* CreateWidget();
 
 private:
 	/* In Wt thread */
-	//void OnWtRatiometricStateChanged(Wt::WCheckBox* checkbox);
-	//void OnWtOutputStateChanged(Wt::WCheckBox* checkbox);
 
 private:
 	PhidgetsAdvancedServo* m_phidget;
