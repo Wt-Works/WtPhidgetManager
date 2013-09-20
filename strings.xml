@@ -79,7 +79,7 @@
   <message id="Function3521">3521_0 - Sharp Distance Sensor (10-80cm)</message>
   <message id="Function3522">3522_0 - Sharp Distance Sensor (20-150cm)</message>
   <message id="FunctionAFormat">{1} A</message>
-  <message id="FunctionCMFormat">{1} C</message>
+  <message id="FunctionCFormat">{1} C</message>
   <message id="FunctionCMFormat">{1} cm</message>
   <message id="FunctionDBFormat">{1} dB</message>
 	<message id="FunctionDSFormat">{1} °/s</message>
