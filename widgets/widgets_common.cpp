@@ -5,11 +5,12 @@
  *  This code is GPLv3.
  */
 
-#include "widgets_common.h"
-
 #include <Wt/WHBoxLayout>
 #include <Wt/WTable>
 #include <Wt/WText>
+
+#include "widgets_common.h"
+
 #include "../phidget_manager.h"
 #include "../phidgets/phidgets_common.h"
 

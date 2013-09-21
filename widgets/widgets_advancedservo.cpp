@@ -5,7 +5,6 @@
  *  This code is GPLv3.
  */
 
-#include "widgets_advancedservo.h"
 #include <Wt/WCheckBox>
 #include <Wt/WComboBox>
 #include <Wt/WGroupBox>
@@ -15,6 +14,8 @@
 #include <Wt/WTable>
 #include <Wt/WText>
 #include <Wt/WVBoxLayout>
+
+#include "widgets_advancedservo.h"
 
 #include "../app.h"
 #include "../app_manager.h"

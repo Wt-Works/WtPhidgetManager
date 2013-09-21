@@ -5,8 +5,6 @@
  *  This code is GPLv3.
  */
 
-#include "widgets_interfacekit.h"
-
 #include <Wt/WCheckBox>
 #include <Wt/WComboBox>
 #include <Wt/WGroupBox>
@@ -17,6 +15,8 @@
 #include <Wt/WTableCell>
 #include <Wt/WText>
 #include <Wt/WVBoxLayout>
+
+#include "widgets_interfacekit.h"
 
 #include "../app.h"
 #include "../app_manager.h"

@@ -5,8 +5,6 @@
  *  This code is GPLv3.
  */
 
-#include "widgets_rfid.h"
-
 #include <Wt/WCheckBox>
 #include <Wt/WComboBox>
 #include <Wt/WGroupBox>
@@ -19,11 +17,12 @@
 #include <Wt/WText>
 #include <Wt/WVBoxLayout>
 
+#include "widgets_rfid.h"
+
+#include "../app.h"
 #include "../app_manager.h"
 #include "../phidgets/phidgets_rfid.h"
 #include "../phidget_manager.h"
-
-#include "../app.h"
 
 
 WidgetsRFID::WidgetsRFID(PhidgetsRFID* phidget, PhidgetApplication* application)

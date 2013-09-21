@@ -5,11 +5,11 @@
  *  This code is GPLv3.
  */
 
-#include "widgets_manager.h"
-
 #include <Wt/WTable>
 #include <Wt/WText>
 #include <Wt/WHBoxLayout>
+
+#include "widgets_manager.h"
 
 #include "../global.h"
 
