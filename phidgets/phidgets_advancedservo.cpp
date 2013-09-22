@@ -74,26 +74,7 @@ int PhidgetsAdvancedServo::OnPhidgetAttach(CPhidgetHandle handle)
 {
 	if (handle != GetHandle())
 		return EPHIDGET_UNEXPECTED;
-#if 0
-	int status;
-	int count;
-	if (EPHIDGET_OK != (status=CPhidgetInterfaceKit_getSensorCount(GetNativeHandle(), &count)))
-		return status;
 
-	int i;
-	for (i=0; i<count; i++)
-	{
-		int rate;
-		if (EPHIDGET_OK == CPhidgetInterfaceKit_getDataRateMin(GetNativeHandle(), i, &rate))
-		{
-			if (1000 < rate)
-				rate=1000;
-
-			CPhidgetInterfaceKit_setSensorChangeTrigger(GetNativeHandle(), i, 1);
-			CPhidgetInterfaceKit_setDataRate(GetNativeHandle(), i, rate);
-		}
-	}
-#endif	
 	::GetApplicationManager()->OnPhidgetAttached(GetSerial());
 	return EPHIDGET_OK;
 }

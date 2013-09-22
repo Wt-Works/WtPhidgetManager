@@ -20,14 +20,21 @@ Wt::WString Function1101(int value) {return VALUE("FunctionDefaultFormat", value
 Wt::WString Function1102(int value) {return VALUESTR("FunctionDefaultFormat", Wt::WString::tr(400>=value ? "Detected" : "Not detected"));}
 Wt::WString Function1103(int value) {return VALUE("FunctionDefaultFormat", value);}
 Wt::WString Function1104(int value) {return VALUE("FunctionDefaultFormat", value);}
+Wt::WString Function1105(int value) {return VALUE("FunctionDefaultFormat", value);}
 Wt::WString Function1106(int value) {return VALUE("FunctionDefaultFormat", value);}
 Wt::WString Function1108(int value) {return VALUE("FunctionGaussFormat", 500.0-(double)value);}
+Wt::WString Function1107(int value) {return VALUE("FunctionRHFormat", (((double)value/1000.0)*190.6)-40.2);}
 Wt::WString Function1109(int value) {return VALUE("FunctionDefaultFormat", value);}
+Wt::WString Function1110(int value) {return VALUESTR("FunctionDefaultFormat", Wt::WString::tr(500<=value ? "Touched" : "Untouched"));}
 Wt::WString Function1111(int value) {return VALUESTR("FunctionDefaultFormat", Wt::WString::tr(400>=value || 600<=value ? "Motion" : "No motion"));}
 Wt::WString Function1112(int value) {return VALUE("FunctionDefaultFormat", value);}
 Wt::WString Function1113(int value) {return VALUE("FunctionDefaultFormat", value);}
-Wt::WString Function1115(int value) {return VALUE("FunctionKPAFormat", (double)value/4.0+10.0);}
+Wt::WString Function1114(int value) {return VALUE("FunctionVFormat", ((double)value/4.0)-50.0);}
+Wt::WString Function1115(int value) {return VALUE("FunctionKPAFormat", ((double)value/4.0)+10.0);}
 Wt::WString Function1116(int value) {return VALUE("FunctionDefaultFormat", value);}
+Wt::WString Function1117(int value) {return VALUE("FunctionVFormat", ((double)value*0.06)-30.0);}
+Wt::WString Function1118AC(int value) {return VALUE("FunctionAFormat", (double)value*0.06938);}
+Wt::WString Function1118DC(int value) {return VALUE("FunctionAFormat", ((double)value/8.0)-62.5);}
 Wt::WString Function1119AC(int value) {return VALUE("FunctionAFormat", (double)value*0.02775);}
 Wt::WString Function1119DC(int value) {return VALUE("FunctionAFormat", ((double)value/20.0)-25.0);}
 Wt::WString Function1120(int value) {return VALUE("FunctionDefaultFormat", value);} //Needs callibration
@@ -111,8 +118,8 @@ Wt::WString SensorFunction::ConvertSensorValue(int value)
 
 SensorFunctions::SensorFunctions()
 {
-	m_ratiometric_count = 48;
-	m_non_ratiometric_count = 26;
+	m_ratiometric_count = 53;
+	m_non_ratiometric_count = 28;
 	m_functions = new SensorFunction*[m_ratiometric_count+m_non_ratiometric_count];
 	int i=0;
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("FunctionDefault"), &DefaultFunction, true, 0, 1000);
@@ -120,14 +127,19 @@ SensorFunctions::SensorFunctions()
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1102"), &Function1102, true, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1103"), &Function1103, true, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1104"), &Function1104, true, 0, 1000);
+	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1105"), &Function1105, true, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1106"), &Function1106, true, 0, 1000);
+	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1107"), &Function1107, true, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1108"), &Function1108, true, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1109"), &Function1109, true, 0, 1000);
+	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1110"), &Function1110, true, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1111"), &Function1111, true, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1112"), &Function1112, true, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1113"), &Function1113, true, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1115"), &Function1115, true, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1116"), &Function1116, true, 0, 1000);
+	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1118AC"), &Function1118AC, true, 0, 1000);
+	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1118DC"), &Function1118DC, true, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1119AC"), &Function1119AC, true, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1119DC"), &Function1119DC, true, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1120"), &Function1120, true, 0, 1000);
@@ -150,7 +162,7 @@ SensorFunctions::SensorFunctions()
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1138PSI"), &Function1138PSI, true, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1139KPA"), &Function1139KPA, true, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1139PSI"), &Function1139PSI, true, 0, 1000);
-	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1140KPS"), &Function1140KPA, true, 0, 1000);
+	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1140KPA"), &Function1140KPA, true, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1140PSI"), &Function1140PSI, true, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1141KPA"), &Function1141KPA, true, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1141PSI"), &Function1141PSI, true, 0, 1000);
@@ -164,6 +176,8 @@ SensorFunctions::SensorFunctions()
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function3521"), &Function3521, true, 80, 500);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function3522"), &Function3522, true, 80, 490);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("FunctionDefault"), &DefaultFunction, false, 0, 1000);
+	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1114"), &Function1114, false, 0, 1000);
+	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1117"), &Function1117, false, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1123"), &Function1123, false, 0, 1000);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1127"), &Function1127, false, 0, 950);
 	m_functions[i++] = new SensorFunction(Wt::WString::tr("Function1130PH"), &Function1130PH, false, 0, 1000);
